@@ -68,6 +68,9 @@ public struct PaywallView: View {
     /// Terms of service URL (required for App Store submission)
     public let termsOfServiceURL: URL?
     
+    /// Source/context for analytics tracking (e.g., "onboarding", "settings", "feature_gate")
+    public let analyticsSource: String
+    
     @State private var selectedProduct: Product?
     @State private var showingErrorAlert = false
     @State private var errorMessage = ""
@@ -79,10 +82,12 @@ public struct PaywallView: View {
     ///   - configuration: Paywall configuration (default uses PremiumManager configuration)
     ///   - privacyPolicyURL: URL to privacy policy (required for App Store)
     ///   - termsOfServiceURL: URL to terms of service (required for App Store)
+    ///   - analyticsSource: Source/context for analytics tracking (default: "unknown")
     public init(
         configuration: PaywallConfiguration? = nil,
         privacyPolicyURL: URL? = nil,
-        termsOfServiceURL: URL? = nil
+        termsOfServiceURL: URL? = nil,
+        analyticsSource: String = "unknown"
     ) {
         // Use provided configuration or create one from PremiumManager
         let managerConfig = PremiumManager.shared.currentConfiguration
@@ -98,6 +103,7 @@ public struct PaywallView: View {
         self.benefits = nil
         self.privacyPolicyURL = privacyPolicyURL
         self.termsOfServiceURL = termsOfServiceURL
+        self.analyticsSource = analyticsSource
     }
     
     /// Initialize paywall with optional customization (legacy API)
@@ -129,6 +135,7 @@ public struct PaywallView: View {
         self.benefits = benefits
         self.privacyPolicyURL = privacyPolicyURL
         self.termsOfServiceURL = termsOfServiceURL
+        self.analyticsSource = "unknown"
     }
     
     public var body: some View {
@@ -186,6 +193,7 @@ public struct PaywallView: View {
             }
             .onAppear {
                 premiumManager.ensureInitialized()
+                premiumManager.trackPaywallShown(source: analyticsSource)
                 selectDefaultProduct()
             }
         }
