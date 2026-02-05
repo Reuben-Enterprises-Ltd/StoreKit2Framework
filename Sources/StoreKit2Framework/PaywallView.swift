@@ -677,9 +677,7 @@ extension Product.SubscriptionPeriod.Unit {
 
 #Preview {
     PaywallView(
-        headline: "Go Pro to Continue",
-        privacyPolicyURL: URL(string: "https://example.com/privacy"),
-        termsOfServiceURL: URL(string: "https://example.com/terms")
+        headline: "Go Pro to Continue"
     )
 }
 
@@ -697,9 +695,7 @@ extension Product.SubscriptionPeriod.Unit {
                 title: "Exclusive Features",
                 description: "Premium-only tools and options"
             )
-        ],
-        privacyPolicyURL: URL(string: "https://example.com/privacy"),
-        termsOfServiceURL: URL(string: "https://example.com/terms")
+        ]
     )
 }
 #endif

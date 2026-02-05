@@ -92,12 +92,22 @@ PaywallView(
 ### With Legal Links (Required for App Store)
 
 ```swift
+// Legal URLs are now configured in PremiumManager.Configuration
+// Configure once in app init:
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
+    privacyPolicyURL: URL(string: "https://yourapp.com/privacy")!,
+    termsOfServiceURL: URL(string: "https://yourapp.com/terms")!
+)
+PremiumManager.shared.configure(config)
+
+// Then use PaywallView without URLs:
 PaywallView(
     headline: "Go Premium",
-    benefits: customBenefits,
-    privacyPolicyURL: URL(string: "https://yourapp.com/privacy"),
-    termsOfServiceURL: URL(string: "https://yourapp.com/terms")
+    benefits: customBenefits
 )
+// Legal links automatically appear from configuration
 ```
 
 ## Features
@@ -233,7 +243,7 @@ struct SettingsView: View {
 ✅ Present early in user journey when appropriate  
 ✅ Provide clear value proposition in headline  
 ✅ Customize benefits to match your app's features  
-✅ Include privacy policy and terms links (required by App Store)  
+✅ Include privacy policy and terms links (configured in PremiumManager.Configuration)  
 ✅ Test with real product IDs in production  
 ✅ Use StoreKit Configuration file for testing  
 
@@ -243,6 +253,7 @@ struct SettingsView: View {
 ❌ Don't use aggressive or dark patterns  
 ❌ Don't forget to test purchase and restore flows  
 ❌ Don't hardcode product IDs in the view (use PremiumManager)  
+❌ Don't pass legal URLs to PaywallView (configure in PremiumManager instead)  
 
 ## SwiftUI Previews
 
@@ -251,10 +262,9 @@ The PaywallView includes preview providers for development:
 ```swift
 #Preview {
     PaywallView(
-        headline: "Go Pro to Continue",
-        privacyPolicyURL: URL(string: "https://example.com/privacy"),
-        termsOfServiceURL: URL(string: "https://example.com/terms")
+        headline: "Go Pro to Continue"
     )
+    // Note: Previews use default legal URLs from Configuration
 }
 
 #Preview("Custom Benefits") {
@@ -271,8 +281,9 @@ The PaywallView includes preview providers for development:
                 title: "Exclusive Features",
                 description: "Premium-only tools and options"
             )
-        ],
-        privacyPolicyURL: URL(string: "https://example.com/privacy"),
+        ]
+    )
+}
         termsOfServiceURL: URL(string: "https://example.com/terms")
     )
 }

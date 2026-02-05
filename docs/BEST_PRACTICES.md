@@ -350,9 +350,8 @@ guard premiumManager.isPremium else {
 PaywallView(
     configuration: .init(
         showRestoreButton: true  // Always true!
-    ),
-    privacyPolicyURL: privacyURL,
-    termsOfServiceURL: termsURL
+    )
+    // Legal URLs come from PremiumManager.Configuration
 )
 ```
 
@@ -557,11 +556,17 @@ Required to show:
 - Subscription duration
 
 ```swift
-PaywallView(
+// Configure legal URLs once in app init
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
     privacyPolicyURL: URL(string: "https://yourapp.com/privacy")!,
-    termsOfServiceURL: URL(string: "https://yourapp.com/terms")!,
-    analyticsSource: "settings"
+    termsOfServiceURL: URL(string: "https://yourapp.com/terms")!
 )
+PremiumManager.shared.configure(config)
+
+// Then use PaywallView anywhere without repeating URLs
+PaywallView(analyticsSource: "settings")
 ```
 
 ### App Review Guidelines

@@ -266,6 +266,8 @@ public struct Configuration {
     public var analytics: (any PremiumAnalytics)?
     public var offlineGracePeriod: TimeInterval
     public var enablePromotionalOffers: Bool
+    public var privacyPolicyURL: URL
+    public var termsOfServiceURL: URL
 }
 ```
 
@@ -279,7 +281,9 @@ public init(
     cacheKey: String = "premium_status",
     analytics: (any PremiumAnalytics)? = nil,
     offlineGracePeriod: TimeInterval = 86400,
-    enablePromotionalOffers: Bool = false
+    enablePromotionalOffers: Bool = false,
+    privacyPolicyURL: URL = URL(string: "https://support.reubenenterprises.com/privacy")!,
+    termsOfServiceURL: URL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
 )
 ```
 
@@ -291,6 +295,12 @@ public init(
 - `analytics`: Optional analytics delegate
 - `offlineGracePeriod`: Seconds premium remains accessible offline (default: 24 hours)
 - `enablePromotionalOffers`: Enable promotional offers support
+- `privacyPolicyURL`: Privacy policy URL (default: `https://support.reubenenterprises.com/privacy`)
+- `termsOfServiceURL`: Terms of service URL (default: Apple's standard EULA)
+
+**Default Legal URLs:**
+- Privacy: `https://support.reubenenterprises.com/privacy`
+- Terms: `https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`
 
 #### Static Presets
 
@@ -299,6 +309,8 @@ public static var `default`: Configuration
 public static var debug: Configuration
 public static var production: Configuration
 ```
+
+All presets include the default legal URLs.
 
 #### validate()
 
@@ -414,20 +426,42 @@ public init(
 ```swift
 public init(
     configuration: PaywallConfiguration? = nil,
-    privacyPolicyURL: URL? = nil,
-    termsOfServiceURL: URL? = nil,
+    privacyPolicyURL: URL? = nil,  // Deprecated
+    termsOfServiceURL: URL? = nil,  // Deprecated
     analyticsSource: String = PaywallView.defaultAnalyticsSource
 )
 ```
 
 **Parameters:**
 - `configuration`: Custom paywall configuration (uses PremiumManager config if nil)
-- `privacyPolicyURL`: Link to privacy policy (required for App Store)
-- `termsOfServiceURL`: Link to terms of service (required for App Store)
+- `privacyPolicyURL`: **Deprecated** - Use `Configuration.privacyPolicyURL` instead
+- `termsOfServiceURL`: **Deprecated** - Use `Configuration.termsOfServiceURL` instead
 - `analyticsSource`: Source/context for analytics tracking
 
-**Example:**
+**Example (Updated Approach):**
 ```swift
+// Configure legal URLs once in app init
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
+    privacyPolicyURL: URL(string: "https://app.com/privacy")!,
+    termsOfServiceURL: URL(string: "https://app.com/terms")!
+)
+PremiumManager.shared.configure(config)
+
+// Use PaywallView without URLs - they come from config
+PaywallView(
+    configuration: .init(
+        headline: "Unlock Your Potential",
+        showRestoreButton: true
+    ),
+    analyticsSource: "onboarding"
+)
+```
+
+**Legacy Example (Still Supported):**
+```swift
+// URLs can still be passed directly (deprecated)
 PaywallView(
     configuration: .init(
         headline: "Unlock Your Potential",
@@ -445,13 +479,13 @@ PaywallView(
 public init(
     headline: String? = nil,
     benefits: [BenefitItem]? = nil,
-    privacyPolicyURL: URL? = nil,
-    termsOfServiceURL: URL? = nil,
+    privacyPolicyURL: URL? = nil,  // Deprecated
+    termsOfServiceURL: URL? = nil,  // Deprecated
     analyticsSource: String = PaywallView.defaultAnalyticsSource
 )
 ```
 
-**Note:** Use modern initializer with `PaywallConfiguration` instead.
+**Note:** Use modern initializer with `PaywallConfiguration` instead. Legal URLs should be configured in `PremiumManager.Configuration`.
 
 ### BenefitItem
 
