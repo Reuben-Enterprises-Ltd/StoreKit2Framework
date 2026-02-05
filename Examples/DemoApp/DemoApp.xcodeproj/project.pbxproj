@@ -6,30 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		2A000001000000000000001 /* StoreKit2Framework in Frameworks */ = {isa = PBXBuildFile; productRef = 2A000002000000000000001 /* StoreKit2Framework */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		2A000003000000000000001 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2A000004000000000000001 /* Exceptions for "DemoApp" folder in "DemoApp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 2A000005000000000000001 /* DemoApp */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2A000006000000000000001 /* DemoApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				2A000004000000000000001 /* Exceptions for "DemoApp" folder in "DemoApp" target */,
-			);
 			path = DemoApp;
 			sourceTree = "<group>";
 		};
@@ -40,7 +23,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A000001000000000000001 /* StoreKit2Framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +65,6 @@
 			);
 			name = DemoApp;
 			packageProductDependencies = (
-				2A000002000000000000001 /* StoreKit2Framework */,
 			);
 			productName = DemoApp;
 			productReference = 2A000003000000000000001 /* DemoApp.app */;
@@ -114,7 +95,7 @@
 			mainGroup = 2A000008000000000000001;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2A000015000000000000001 /* XCLocalSwiftPackageReference "../.." */,
+				2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A000009000000000000001 /* Products */;
@@ -329,15 +310,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2A000014000000000000001 /* Build configuration list for PBXProject "DemoApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2A000016000000000000001 /* Debug */,
-				2A000017000000000000001 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		2A000010000000000000001 /* Build configuration list for PBXNativeTarget "DemoApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -347,22 +319,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		2A000014000000000000001 /* Build configuration list for PBXProject "DemoApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A000016000000000000001 /* Debug */,
+				2A000017000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2A000015000000000000001 /* XCLocalSwiftPackageReference "../.." */ = {
+		2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../..;
+			relativePath = ../../../StoreKit2Framework;
 		};
 /* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		2A000002000000000000001 /* StoreKit2Framework */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2A000015000000000000001 /* XCLocalSwiftPackageReference "../.." */;
-			productName = StoreKit2Framework;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2A000013000000000000001 /* Project object */;
 }
