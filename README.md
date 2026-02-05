@@ -53,10 +53,10 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - Real-time transaction monitoring
 - Premium status caching
 - PaywallView UI component
+- Premium settings components (PremiumSettingsSection, PremiumStatusRow, PremiumBadge)
 - Comprehensive tests
 
 ### 🚧 In Progress
-- Settings integration
 - Feature gating utilities
 - Example app/demo
 
@@ -66,6 +66,7 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - **`STOREKIT_COPILOT_AGENT_GUIDE.md`** - Comprehensive guide on StoreKit 2 implementation patterns
 - **`PREMIUM_MANAGER_USAGE.md`** - PremiumManager usage guide and examples
 - **`PAYWALL_VIEW_USAGE.md`** - PaywallView usage guide and examples
+- **`PREMIUM_SETTINGS_USAGE.md`** - Premium settings components usage guide
 - **`AGENTS.md`** - Development guidelines for Swift and SwiftUI
 - **`ROADMAP.md`** - Complete implementation roadmap with phases and timelines
 
@@ -207,7 +208,30 @@ struct PremiumFeatureView: View {
 }
 ```
 
-See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md) and [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) for complete guides.
+### 5. Add Settings Integration
+
+```swift
+import SwiftUI
+import StoreKit2Framework
+
+struct SettingsView: View {
+    var body: some View {
+        NavigationStack {
+            Form {
+                PremiumSettingsSection()
+                
+                Section("General") {
+                    Text("Notifications")
+                    Text("Privacy")
+                }
+            }
+            .navigationTitle("Settings")
+        }
+    }
+}
+```
+
+See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md), [PREMIUM_SETTINGS_USAGE.md](PREMIUM_SETTINGS_USAGE.md), and [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) for complete guides.
 
 ## 📦 Features
 
@@ -221,9 +245,10 @@ See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md) and [PREMIUM_MANAGER_USAGE.md
 
 ### UI Components
 - **PaywallView**: ✅ Beautiful purchase screen with customization
-- **Settings Integration**: 🚧 Premium status display (planned)
+- **PremiumSettingsSection**: ✅ Complete settings section with status and actions
+- **PremiumStatusRow**: ✅ Compact row for List views
+- **PremiumBadge**: ✅ "Pro" badge indicator
 - **Feature Gating**: 🚧 Lock/unlock premium features (planned)
-- **Premium Badges**: 🚧 Visual indicators (planned)
 
 ### Developer Experience
 - **Simple Setup**: One-line initialization
@@ -337,7 +362,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 3. ✅ Issue #001 Complete (Package foundation)
 4. ✅ Issue #002 Complete (Core PremiumManager)
 5. ✅ Issue #003 Complete (PaywallView UI)
-6. 🚧 Issue #004: Settings Integration
+6. ✅ Issue #004 Complete (Settings Integration)
 7. 🚧 Issue #005: Feature Gating Utilities
 8. ⏳ Issue #006: Testing Infrastructure
 9. ⏳ Issue #007: Example App/Demo
