@@ -169,14 +169,9 @@ struct PremiumManagerTests {
         // After loading (success or failure), error state should be defined
         // If loading succeeded, error should be nil
         // If loading failed, error should be set
-        // We just verify the behavior is consistent
-        let hasError = manager.error != nil
-        let hasProducts = !manager.products.isEmpty
-        
-        // Either we have products (success) or we have an error (failure)
-        // or neither (empty store, which is also valid)
-        _ = hasError
-        _ = hasProducts
+        // We verify the behavior is consistent (no crash, state is valid)
+        _ = manager.error != nil
+        _ = !manager.products.isEmpty
         #endif
     }
     

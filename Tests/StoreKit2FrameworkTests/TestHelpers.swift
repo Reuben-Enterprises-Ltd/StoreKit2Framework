@@ -108,6 +108,7 @@ enum TestHelpers {
     // MARK: - Test Utilities
     
     /// Reset UserDefaults cache for testing
+    /// Note: Uses the same key as PremiumManager.cachedPremiumStatusKey
     static func clearPremiumCache() {
         UserDefaults.standard.removeObject(forKey: "cachedPremiumStatus")
     }
