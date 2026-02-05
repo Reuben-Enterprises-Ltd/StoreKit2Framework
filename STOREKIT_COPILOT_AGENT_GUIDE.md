@@ -113,7 +113,7 @@ final class PremiumManager {
     
     // MARK: - Private State
     
-    /// Active subscription or lifetime purchase
+    /// Active subscription or lifetime non-renewing subscription
     private(set) var activeEntitlement: Product.SubscriptionInfo.Status?
     
     /// Transaction update task
@@ -256,10 +256,23 @@ final class PremiumManager {
             do {
                 let transaction = try checkVerified(result)
                 
-                // Check for lifetime purchase
+                // Check for lifetime non-renewing subscription
                 if transaction.productID == ProductIdentifiers.lifetime {
+                    #if DEBUG
+                    // In debug mode, lifetime expires after 10 minutes for testing
+                    let debugExpirationInterval: TimeInterval = 10 * 60 // 10 minutes
+                    let purchaseDate = transaction.purchaseDate
+                    let expirationDate = purchaseDate.addingTimeInterval(debugExpirationInterval)
+                    
+                    if Date() < expirationDate {
+                        hasActiveEntitlement = true
+                        break
+                    }
+                    #else
+                    // In production, lifetime never expires
                     hasActiveEntitlement = true
                     break
+                    #endif
                 }
                 
                 // Check for active subscription
@@ -797,13 +810,22 @@ struct SomeView: View {
 - Upgrading/downgrading is handled automatically
 - Simpler to manage
 
-### Lifetime Purchase
+### Lifetime Subscription
 
-The lifetime purchase is a **non-consumable** product, separate from subscriptions:
-- One-time purchase
-- Never expires
-- Syncs across devices automatically
-- Should be priced competitively (typically 2-3x yearly)
+The lifetime product is a **non-renewing subscription**, not a separate non-consumable product:
+- **Type**: Non-renewing subscription (part of the subscription group)
+- **Duration**: Never expires in production
+- **Debug Mode**: Expires after 10 minutes for testing purposes
+- **Syncs**: Across devices automatically
+- **Pricing**: Typically 2-3x yearly subscription price
+
+**Important**: In DEBUG mode, the lifetime subscription expires 10 minutes after purchase. This allows developers to test:
+- Subscription expiration behavior
+- UI updates when premium status changes
+- Re-purchase flows
+- Status refresh logic
+
+In production builds, the lifetime subscription never expires and acts as a permanent premium unlock.
 
 ### Pricing Strategy
 
