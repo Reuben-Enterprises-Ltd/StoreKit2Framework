@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2D8C1FAE2F34D7FD00B5FBAD /* StoreKit2Framework in Frameworks */ = {isa = PBXBuildFile; productRef = 2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		2A000003000000000000001 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D8C1FAE2F34D7FD00B5FBAD /* StoreKit2Framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
