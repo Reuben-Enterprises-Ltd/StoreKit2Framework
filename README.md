@@ -92,7 +92,7 @@ PremiumFeature()
     .premiumRequired()
 ```
 
-[→ Complete Integration Guide](INTEGRATION.md) | [→ Quick Start](QUICK_START.md)
+[→ Complete Integration Guide](docs/INTEGRATION.md) | [→ Quick Start](QUICK_START.md)
 
 ## 🚧 Status: Core Features Implemented
 
@@ -130,27 +130,27 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 ### Documentation
 
 #### Main Guides
-- **[INTEGRATION.md](INTEGRATION.md)** - Complete step-by-step integration guide
-- **[API_REFERENCE.md](API_REFERENCE.md)** - Complete API documentation
-- **[BEST_PRACTICES.md](BEST_PRACTICES.md)** - Best practices and recommendations
-- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and solutions
-- **[MIGRATION.md](MIGRATION.md)** - Migrate from existing StoreKit implementations
+- **[INTEGRATION.md](docs/INTEGRATION.md)** - Complete step-by-step integration guide
+- **[API_REFERENCE.md](docs/API_REFERENCE.md)** - Complete API documentation
+- **[BEST_PRACTICES.md](docs/BEST_PRACTICES.md)** - Best practices and recommendations
+- **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[MIGRATION.md](docs/MIGRATION.md)** - Migrate from existing StoreKit implementations
 
 #### Component Guides
-- **[PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md)** - PremiumManager usage guide
-- **[PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md)** - PaywallView usage guide
-- **[CONFIGURATION_USAGE.md](CONFIGURATION_USAGE.md)** - Configuration system guide
-- **[PREMIUM_SETTINGS_USAGE.md](PREMIUM_SETTINGS_USAGE.md)** - Settings components guide
-- **[FEATURE_GATING_USAGE.md](FEATURE_GATING_USAGE.md)** - Feature gating utilities guide
-- **[ADVANCED_FEATURES.md](ADVANCED_FEATURES.md)** - Analytics and advanced features
+- **[PREMIUM_MANAGER_USAGE.md](docs/PREMIUM_MANAGER_USAGE.md)** - PremiumManager usage guide
+- **[PAYWALL_VIEW_USAGE.md](docs/PAYWALL_VIEW_USAGE.md)** - PaywallView usage guide
+- **[CONFIGURATION_USAGE.md](docs/CONFIGURATION_USAGE.md)** - Configuration system guide
+- **[PREMIUM_SETTINGS_USAGE.md](docs/PREMIUM_SETTINGS_USAGE.md)** - Settings components guide
+- **[FEATURE_GATING_USAGE.md](docs/FEATURE_GATING_USAGE.md)** - Feature gating utilities guide
+- **[ADVANCED_FEATURES.md](docs/ADVANCED_FEATURES.md)** - Analytics and advanced features
 
 #### Testing & Development
-- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive testing documentation
-- **[SCHEME_CONFIGURATION.md](SCHEME_CONFIGURATION.md)** - Xcode scheme setup
+- **[TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** - Comprehensive testing documentation
+- **[SCHEME_CONFIGURATION.md](docs/SCHEME_CONFIGURATION.md)** - Xcode scheme setup
 - **[QUICK_START.md](QUICK_START.md)** - Quick start for implementation
 - **[AGENTS.md](AGENTS.md)** - Swift and SwiftUI development guidelines
-- **[STOREKIT_COPILOT_AGENT_GUIDE.md](STOREKIT_COPILOT_AGENT_GUIDE.md)** - Comprehensive StoreKit 2 guide
-- **[ROADMAP.md](ROADMAP.md)** - Implementation roadmap
+- **[STOREKIT_COPILOT_AGENT_GUIDE.md](docs/STOREKIT_COPILOT_AGENT_GUIDE.md)** - Comprehensive StoreKit 2 guide
+- **[ROADMAP.md](docs/ROADMAP.md)** - Implementation roadmap
 
 ### Issues
 The `/issues` directory contains detailed implementation issues:
@@ -486,19 +486,19 @@ swift test --filter "PremiumManager Tests"
 
 ### Quick Links
 
-- 📘 **[Integration Guide](INTEGRATION.md)** - Complete step-by-step setup
-- 📗 **[API Reference](API_REFERENCE.md)** - All public APIs documented
-- 📕 **[Best Practices](BEST_PRACTICES.md)** - Tips for great subscription experiences
-- 📙 **[Troubleshooting](TROUBLESHOOTING.md)** - Fix common issues
-- 📓 **[Migration Guide](MIGRATION.md)** - Migrate from existing StoreKit code
+- 📘 **[Integration Guide](docs/INTEGRATION.md)** - Complete step-by-step setup
+- 📗 **[API Reference](docs/API_REFERENCE.md)** - All public APIs documented
+- 📕 **[Best Practices](docs/BEST_PRACTICES.md)** - Tips for great subscription experiences
+- 📙 **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Fix common issues
+- 📓 **[Migration Guide](docs/MIGRATION.md)** - Migrate from existing StoreKit code
 
 ### Getting Started
 
-1. **New to the framework?** Start with [INTEGRATION.md](INTEGRATION.md)
-2. **Have questions?** Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-3. **Need API details?** See [API_REFERENCE.md](API_REFERENCE.md)
-4. **Want to optimize?** Read [BEST_PRACTICES.md](BEST_PRACTICES.md)
-5. **Migrating existing code?** Follow [MIGRATION.md](MIGRATION.md)
+1. **New to the framework?** Start with [docs/INTEGRATION.md](docs/INTEGRATION.md)
+2. **Have questions?** Check [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+3. **Need API details?** See [docs/API_REFERENCE.md](docs/API_REFERENCE.md)
+4. **Want to optimize?** Read [docs/BEST_PRACTICES.md](docs/BEST_PRACTICES.md)
+5. **Migrating existing code?** Follow [docs/MIGRATION.md](docs/MIGRATION.md)
 
 ## 🤝 Contributing
 

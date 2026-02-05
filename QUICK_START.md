@@ -5,8 +5,8 @@ Welcome! This guide will help you begin implementing the StoreKit2Framework base
 ## 📚 First: Read These Documents
 
 1. **README.md** - Start here for project overview
-2. **INVESTIGATION_SUMMARY.md** - Executive summary of investigation
-3. **ROADMAP.md** - Phased implementation plan
+2. **docs/INVESTIGATION_SUMMARY.md** - Executive summary of investigation
+3. **docs/ROADMAP.md** - Phased implementation plan
 4. **issues/README.md** - Quick reference for all issues
 
 ## 🎯 Your Mission
@@ -17,7 +17,7 @@ Create a reusable Swift Package that makes it trivial to add StoreKit 2 subscrip
 
 ### Step 1: Understand the Architecture
 
-Read `STOREKIT_COPILOT_AGENT_GUIDE.md` (lines 1-100) to understand the core architecture:
+Read `docs/STOREKIT_COPILOT_AGENT_GUIDE.md` (lines 1-100) to understand the core architecture:
 - PremiumManager (singleton, @Observable, @MainActor)
 - PaywallView (SwiftUI component)
 - Settings integration
@@ -108,7 +108,7 @@ See issue #006 for full testing infrastructure.
 
 ## 📖 Reference Code
 
-The `STOREKIT_COPILOT_AGENT_GUIDE.md` contains:
+The `docs/STOREKIT_COPILOT_AGENT_GUIDE.md` contains:
 - Complete PremiumManager implementation (lines 76-335)
 - PaywallView implementation (lines 480-724)
 - Settings integration (lines 725-786)
@@ -139,7 +139,7 @@ Each issue contains:
 
 ## 💡 Tips for Success
 
-1. **Follow the order** - Dependencies are mapped in ROADMAP.md
+1. **Follow the order** - Dependencies are mapped in docs/ROADMAP.md
 2. **Read acceptance criteria** - Know when you're done
 3. **Test as you go** - Don't wait until the end
 4. **Document as you code** - Write DocC comments
@@ -168,10 +168,10 @@ For each issue, you're done when:
 ## 📞 Need Help?
 
 Refer to:
-- **STOREKIT_COPILOT_AGENT_GUIDE.md** - Comprehensive implementation guide
+- **docs/STOREKIT_COPILOT_AGENT_GUIDE.md** - Comprehensive implementation guide
 - **AGENTS.md** - Swift/SwiftUI guidelines
 - **issues/** - Detailed requirements for each component
-- **ROADMAP.md** - See how everything fits together
+- **docs/ROADMAP.md** - See how everything fits together
 
 ## 📈 Track Your Progress
 

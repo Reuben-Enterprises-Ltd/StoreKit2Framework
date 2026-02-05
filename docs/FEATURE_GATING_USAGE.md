@@ -626,7 +626,7 @@ extension PremiumManager {
 - [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) - Core PremiumManager guide
 - [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md) - PaywallView usage guide
 - [PREMIUM_SETTINGS_USAGE.md](PREMIUM_SETTINGS_USAGE.md) - Settings components guide
-- [QUICK_START.md](QUICK_START.md) - Quick start guide
+- [QUICK_START.md](../QUICK_START.md) - Quick start guide
 
 ---
 
