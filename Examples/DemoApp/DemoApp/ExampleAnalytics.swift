@@ -38,7 +38,7 @@ class ExampleAnalytics: PremiumAnalytics {
         let parameters: [String: Any] = [
             "product_id": product.id,
             "price_string": product.displayPrice,
-            "type": product.type.debugDescription
+            "type": product.type.localizedDescription
         ]
         logEvent(event, parameters: parameters)
         
