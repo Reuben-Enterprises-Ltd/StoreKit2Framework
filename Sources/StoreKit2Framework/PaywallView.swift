@@ -174,16 +174,16 @@ public struct PaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Maybe Later") {
+                    Button(String(localized: "Maybe Later", comment: "Button to dismiss paywall")) {
                         dismiss()
                     }
                 }
             }
-            .alert("Purchase Failed", isPresented: $showingErrorAlert) {
-                Button("OK") {
+            .alert(String(localized: "Purchase Failed", comment: "Alert title for failed purchase"), isPresented: $showingErrorAlert) {
+                Button(String(localized: "OK", comment: "Button to dismiss alert")) {
                     showingErrorAlert = false
                 }
-                Button("Try Again") {
+                Button(String(localized: "Try Again", comment: "Button to retry failed purchase")) {
                     showingErrorAlert = false
                     if let product = selectedProduct {
                         Task {
@@ -214,7 +214,7 @@ public struct PaywallView: View {
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .multilineTextAlignment(.center)
             
-            Text("Get the most out of your experience")
+            Text(String(localized: "Get the most out of your experience", comment: "Paywall subtitle text"))
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -226,7 +226,7 @@ public struct PaywallView: View {
     private var loadingSection: some View {
         VStack(spacing: 16) {
             ProgressView()
-            Text("Loading products...")
+            Text(String(localized: "Loading products...", comment: "Loading message while fetching products"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -284,23 +284,23 @@ public struct PaywallView: View {
         [
             BenefitItem(
                 icon: "chart.line.uptrend.xyaxis",
-                title: "Advanced Analytics",
-                description: "Deep insights into your data"
+                title: String(localized: "Advanced Analytics", comment: "Default benefit title"),
+                description: String(localized: "Deep insights into your data", comment: "Default benefit description")
             ),
             BenefitItem(
                 icon: "icloud",
-                title: "Cloud Sync",
-                description: "Access everywhere, anytime"
+                title: String(localized: "Cloud Sync", comment: "Default benefit title"),
+                description: String(localized: "Access everywhere, anytime", comment: "Default benefit description")
             ),
             BenefitItem(
                 icon: "paintbrush",
-                title: "Premium Themes",
-                description: "Customize your experience"
+                title: String(localized: "Premium Themes", comment: "Default benefit title"),
+                description: String(localized: "Customize your experience", comment: "Default benefit description")
             ),
             BenefitItem(
                 icon: "bolt.fill",
-                title: "Priority Support",
-                description: "Get help when you need it"
+                title: String(localized: "Priority Support", comment: "Default benefit title"),
+                description: String(localized: "Get help when you need it", comment: "Default benefit description")
             )
         ]
     }
@@ -340,7 +340,7 @@ public struct PaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Text("Start Premium")
+                    Text(String(localized: "Start Premium", comment: "Button to start premium purchase"))
                         .bold()
                 }
             }
@@ -382,7 +382,7 @@ public struct PaywallView: View {
                         ProgressView()
                             .controlSize(.small)
                     } else {
-                        Text("Restore Purchases")
+                        Text(String(localized: "Restore Purchases", comment: "Button to restore previous purchases"))
                     }
                 }
                 .font(.subheadline)
@@ -405,20 +405,20 @@ public struct PaywallView: View {
     
     @ViewBuilder
     private var legalSection: some View {
-        if configuration.showPrivacyLinks && (privacyPolicyURL != nil || termsOfServiceURL != nil) {
+        if configuration.showPrivacyLinks {
             HStack(spacing: 12) {
                 if let privacyURL = privacyPolicyURL {
-                    Link("Privacy Policy", destination: privacyURL)
+                    Link(String(localized: "Privacy", comment: "Link to privacy policy"), destination: privacyURL)
                 }
                 
-                if privacyPolicyURL != nil && termsOfServiceURL != nil {
+                if privacyPolicyURL != nil {
                     Text("•")
                         .foregroundStyle(.secondary)
                 }
                 
-                if let termsURL = termsOfServiceURL {
-                    Link("Terms of Service", destination: termsURL)
-                }
+                // Use provided terms URL or Apple's standard EULA
+                let termsURL = termsOfServiceURL ?? URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
+                Link(String(localized: "Terms", comment: "Link to terms of service/EULA"), destination: termsURL)
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
@@ -433,7 +433,7 @@ public struct PaywallView: View {
                 .font(.system(size: 40))
                 .foregroundStyle(.orange)
             
-            Text("Unable to Load Products")
+            Text(String(localized: "Unable to Load Products", comment: "Error message when products fail to load"))
                 .font(.headline)
             
             Text(error.localizedDescription)
@@ -441,7 +441,7 @@ public struct PaywallView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             
-            Button("Try Again") {
+            Button(String(localized: "Try Again", comment: "Button to retry loading products")) {
                 Task {
                     await premiumManager.loadProducts()
                     selectDefaultProduct()
@@ -516,6 +516,7 @@ public struct ProductOptionButton: View {
     let isSelected: Bool
     let isRecommended: Bool
     let action: () -> Void
+    private let premiumManager = PremiumManager.shared
     
     public init(
         product: Product,
@@ -536,7 +537,7 @@ public struct ProductOptionButton: View {
                 if isRecommended {
                     HStack {
                         Spacer()
-                        Text("Best Value")
+                        Text(String(localized: "Best Value", comment: "Badge for recommended subscription option"))
                             .font(.caption2)
                             .bold()
                             .foregroundStyle(.white)
@@ -555,17 +556,14 @@ public struct ProductOptionButton: View {
                             .font(.subheadline)
                             .bold()
                         
-                        if let subscription = product.subscription {
-                            let period = subscription.subscriptionPeriod
-                            Text("\(period.value) \(period.unit.displayName)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                        Text(periodText)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                         
                         // Show savings for yearly
                         if isRecommended, let subscription = product.subscription,
                            subscription.subscriptionPeriod.unit == .year {
-                            Text("Save up to 40%")
+                            Text(String(localized: "Save up to 40%", comment: "Savings message for yearly subscription"))
                                 .font(.caption2)
                                 .foregroundStyle(.green)
                         }
@@ -577,13 +575,9 @@ public struct ProductOptionButton: View {
                         Text(product.displayPrice)
                             .font(.headline)
                         
-                        if let subscription = product.subscription,
-                           subscription.subscriptionPeriod.unit == .year,
-                           let monthlyPrice = calculateMonthlyPrice(product.price) {
-                            Text("\(monthlyPrice)/month")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
+                        Text(pricePerPeriodText)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                     }
                     
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
@@ -600,6 +594,49 @@ public struct ProductOptionButton: View {
             )
         }
         .buttonStyle(.plain)
+    }
+    
+    /// Returns the period description text for the product
+    private var periodText: String {
+        // Check if this is a lifetime product
+        if let lifetimeId = premiumManager.currentConfiguration.productIdentifiers.lifetime,
+           product.id == lifetimeId {
+            return String(localized: "Lifetime", comment: "Period description for lifetime/non-renewing subscription")
+        }
+        
+        // For subscription products, show the period
+        if let subscription = product.subscription {
+            let period = subscription.subscriptionPeriod
+            return "\(period.value) \(period.unit.displayName)"
+        }
+        
+        // Fallback for other non-renewing subscriptions
+        return String(localized: "Lifetime", comment: "Period description for lifetime/non-renewing subscription")
+    }
+    
+    /// Returns the price per period text (e.g., "$2.08/month" for yearly)
+    private var pricePerPeriodText: String {
+        // Check if this is a lifetime product
+        if let lifetimeId = premiumManager.currentConfiguration.productIdentifiers.lifetime,
+           product.id == lifetimeId {
+            return String(localized: "one off", comment: "Price description for lifetime purchase - pay once")
+        }
+        
+        // For yearly subscriptions, show monthly price
+        if let subscription = product.subscription,
+           subscription.subscriptionPeriod.unit == .year,
+           let monthlyPrice = calculateMonthlyPrice(product.price) {
+            return String(localized: "\(monthlyPrice)/month", comment: "Monthly price breakdown for yearly subscription")
+        }
+        
+        // For monthly subscriptions, show per month
+        if let subscription = product.subscription,
+           subscription.subscriptionPeriod.unit == .month {
+            return String(localized: "per month", comment: "Price period for monthly subscription")
+        }
+        
+        // Default empty
+        return ""
     }
     
     private func calculateMonthlyPrice(_ yearlyPrice: Decimal) -> String? {
