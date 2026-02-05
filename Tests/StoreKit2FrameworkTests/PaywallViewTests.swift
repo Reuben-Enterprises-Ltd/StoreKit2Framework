@@ -39,6 +39,20 @@ struct PaywallViewTests {
         #endif
     }
     
+    @Test("PaywallView can be instantiated with legal URLs")
+    func customLegalURLs() async throws {
+        #if canImport(SwiftUI) && canImport(StoreKit)
+        // PaywallView should accept custom legal URLs
+        let privacyURL = URL(string: "https://example.com/privacy")
+        let termsURL = URL(string: "https://example.com/terms")
+        _ = PaywallView(
+            headline: "Test",
+            privacyPolicyURL: privacyURL,
+            termsOfServiceURL: termsURL
+        )
+        #endif
+    }
+    
     @Test("BenefitItem can be created")
     func benefitItemCreation() async throws {
         #if canImport(SwiftUI) && canImport(StoreKit)

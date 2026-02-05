@@ -13,6 +13,12 @@ public struct PaywallView: View {
     /// Optional benefits list (can be provided by consuming app)
     public let benefits: [BenefitItem]?
     
+    /// Privacy policy URL (required for App Store submission)
+    public let privacyPolicyURL: URL?
+    
+    /// Terms of service URL (required for App Store submission)
+    public let termsOfServiceURL: URL?
+    
     @State private var selectedProduct: Product?
     @State private var showingErrorAlert = false
     @State private var errorMessage = ""
@@ -23,9 +29,18 @@ public struct PaywallView: View {
     /// - Parameters:
     ///   - headline: Custom headline text (default: "Unlock Premium Features")
     ///   - benefits: Custom benefits list (default: nil - uses built-in benefits)
-    public init(headline: String? = nil, benefits: [BenefitItem]? = nil) {
+    ///   - privacyPolicyURL: URL to privacy policy (required for App Store)
+    ///   - termsOfServiceURL: URL to terms of service (required for App Store)
+    public init(
+        headline: String? = nil,
+        benefits: [BenefitItem]? = nil,
+        privacyPolicyURL: URL? = nil,
+        termsOfServiceURL: URL? = nil
+    ) {
         self.headline = headline
         self.benefits = benefits
+        self.privacyPolicyURL = privacyPolicyURL
+        self.termsOfServiceURL = termsOfServiceURL
     }
     
     public var body: some View {
@@ -258,15 +273,26 @@ public struct PaywallView: View {
     
     // MARK: - Legal Section
     
+    @ViewBuilder
     private var legalSection: some View {
-        HStack(spacing: 12) {
-            Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
-            Text("•")
-                .foregroundStyle(.secondary)
-            Link("Terms of Service", destination: URL(string: "https://example.com/terms")!)
+        if privacyPolicyURL != nil || termsOfServiceURL != nil {
+            HStack(spacing: 12) {
+                if let privacyURL = privacyPolicyURL {
+                    Link("Privacy Policy", destination: privacyURL)
+                }
+                
+                if privacyPolicyURL != nil && termsOfServiceURL != nil {
+                    Text("•")
+                        .foregroundStyle(.secondary)
+                }
+                
+                if let termsURL = termsOfServiceURL {
+                    Link("Terms of Service", destination: termsURL)
+                }
+            }
+            .font(.caption2)
+            .foregroundStyle(.secondary)
         }
-        .font(.caption2)
-        .foregroundStyle(.secondary)
     }
     
     // MARK: - Error Section
@@ -477,7 +503,11 @@ extension Product.SubscriptionPeriod.Unit {
 // MARK: - Preview Provider
 
 #Preview {
-    PaywallView(headline: "Go Pro to Continue")
+    PaywallView(
+        headline: "Go Pro to Continue",
+        privacyPolicyURL: URL(string: "https://example.com/privacy"),
+        termsOfServiceURL: URL(string: "https://example.com/terms")
+    )
 }
 
 #Preview("Custom Benefits") {
@@ -494,7 +524,9 @@ extension Product.SubscriptionPeriod.Unit {
                 title: "Exclusive Features",
                 description: "Premium-only tools and options"
             )
-        ]
+        ],
+        privacyPolicyURL: URL(string: "https://example.com/privacy"),
+        termsOfServiceURL: URL(string: "https://example.com/terms")
     )
 }
 #endif
