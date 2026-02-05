@@ -182,11 +182,19 @@ public struct PremiumOverlay: View {
 extension PremiumManager {
     /// Check if user has premium and show paywall if not
     ///
+    /// This method can be used for programmatic feature gating. The feature parameter
+    /// can be used for analytics or logging to track which features users are trying to access.
+    ///
     /// Example usage:
     /// ```swift
     /// premiumManager.requirePremium(feature: "Export") {
-    ///     // User upgraded, can proceed
+    ///     // User has premium, can proceed
     ///     performExport()
+    /// }
+    /// 
+    /// // If not premium, show paywall manually
+    /// if !premiumManager.isPremium {
+    ///     showPaywall = true
     /// }
     /// ```
     public func requirePremium(
@@ -196,8 +204,9 @@ extension PremiumManager {
         if isPremium {
             onUpgrade()
         } else {
-            // This method can be used in conjunction with showing a paywall
-            // The calling code should show a paywall and call onUpgrade when complete
+            // Feature access denied - calling code should show paywall
+            // The feature parameter can be used for analytics/logging:
+            // print("Premium feature '\(feature)' access denied")
         }
     }
 }
