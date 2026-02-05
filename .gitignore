@@ -1,0 +1,20 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode
+xcuserdata/
+*.xcworkspace
+*.xcodeproj
+
+# macOS
+.DS_Store
+
+# Build artifacts
+*.dSYM.zip
+*.ipa
+DerivedData/
+
+# SPM
+.swiftpm/
