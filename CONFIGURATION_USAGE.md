@@ -42,10 +42,10 @@ struct MyApp: App {
                 lifetime: "com.myapp.premium.lifetime"
             ),
             features: [
-                "Unlimited exports",
-                "Advanced analytics",
-                "Cloud sync",
-                "Priority support"
+                .init(title: "Unlimited exports", systemImageName: "square.and.arrow.up"),
+                .init(title: "Advanced analytics", systemImageName: "chart.xyaxis.line"),
+                .init(title: "Cloud sync", systemImageName: "icloud"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark")
             ]
         )
         
@@ -92,6 +92,21 @@ PremiumManager.ProductIdentifiers.default
 // lifetime: "com.yourcompany.yourapp.lifetime"
 ```
 
+### Feature
+
+Represents a displayable benefit/feature shown in the paywall.
+
+```swift
+let feature = PremiumManager.Feature(
+    title: "Cloud Sync",
+    systemImageName: "icloud"
+)
+```
+
+**Properties:**
+- `title: String` - The user-facing title of the feature
+- `systemImageName: String` - The SF Symbol name to represent the feature visually
+
 ### Configuration
 
 Main configuration struct for PremiumManager.
@@ -99,7 +114,10 @@ Main configuration struct for PremiumManager.
 ```swift
 let config = PremiumManager.Configuration(
     productIdentifiers: productIds,
-    features: ["Feature 1", "Feature 2"],
+    features: [
+        .init(title: "Feature 1", systemImageName: "star.fill"),
+        .init(title: "Feature 2", systemImageName: "bolt.fill")
+    ],
     enableDebugMode: false,
     cacheKey: "premium_status"
 )
@@ -107,7 +125,7 @@ let config = PremiumManager.Configuration(
 
 **Properties:**
 - `productIdentifiers: ProductIdentifiers` - Product IDs to use
-- `features: [String]` - List of features/benefits for paywall
+- `features: [PremiumManager.Feature]` - List of features/benefits for paywall with custom SF Symbol icons
 - `enableDebugMode: Bool` - Enable verbose logging
 - `cacheKey: String` - UserDefaults key for caching premium status
 
@@ -130,7 +148,10 @@ Customize the paywall appearance.
 ```swift
 let paywallConfig = PaywallConfiguration(
     headline: "Unlock Premium",
-    features: ["Feature 1", "Feature 2"],
+    features: [
+        .init(title: "Feature 1", systemImageName: "star.fill"),
+        .init(title: "Feature 2", systemImageName: "bolt.fill")
+    ],
     showRestoreButton: true,
     showPrivacyLinks: true,
     tintColor: .blue
@@ -152,9 +173,9 @@ struct SimpleApp: App {
                 lifetime: nil  // No lifetime option
             ),
             features: [
-                "Unlimited exports",
-                "Advanced features",
-                "Priority support"
+                .init(title: "Unlimited exports", systemImageName: "square.and.arrow.up"),
+                .init(title: "Advanced features", systemImageName: "wand.and.stars"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark")
             ]
         )
         
@@ -186,9 +207,9 @@ struct MyApp: App {
                 lifetime: "com.myapp.premium.lifetime"
             ),
             features: [
-                "Export unlimited projects",
-                "Advanced analytics",
-                "Priority support"
+                .init(title: "Export unlimited projects", systemImageName: "square.and.arrow.up"),
+                .init(title: "Advanced analytics", systemImageName: "chart.xyaxis.line"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark")
             ],
             enableDebugMode: false
         )
@@ -224,8 +245,8 @@ enum PremiumTier {
                     yearly: "com.app.basic.yearly"
                 ),
                 features: [
-                    "Remove ads",
-                    "Basic analytics"
+                    .init(title: "Remove ads", systemImageName: "nosign"),
+                    .init(title: "Basic analytics", systemImageName: "chart.bar")
                 ]
             )
         case .pro:
@@ -236,10 +257,10 @@ enum PremiumTier {
                     lifetime: "com.app.pro.lifetime"
                 ),
                 features: [
-                    "All features",
-                    "Advanced analytics",
-                    "Priority support",
-                    "Custom themes"
+                    .init(title: "All features", systemImageName: "star.fill"),
+                    .init(title: "Advanced analytics", systemImageName: "chart.xyaxis.line"),
+                    .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+                    .init(title: "Custom themes", systemImageName: "paintbrush.pointed")
                 ]
             )
         }
@@ -266,9 +287,9 @@ struct ContentView: View {
                 configuration: PaywallConfiguration(
                     headline: "Go Pro to Continue",
                     features: [
-                        "Unlimited access",
-                        "Priority support",
-                        "Cloud sync"
+                        .init(title: "Unlimited access", systemImageName: "infinity"),
+                        .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+                        .init(title: "Cloud sync", systemImageName: "icloud")
                     ],
                     showRestoreButton: true,
                     showPrivacyLinks: true,
@@ -291,9 +312,9 @@ The PaywallView automatically uses features from PremiumManager configuration:
 let config = PremiumManager.Configuration(
     productIdentifiers: .default,
     features: [
-        "Feature A",
-        "Feature B",
-        "Feature C"
+        .init(title: "Feature A", systemImageName: "a.circle.fill"),
+        .init(title: "Feature B", systemImageName: "b.circle.fill"),
+        .init(title: "Feature C", systemImageName: "c.circle.fill")
     ]
 )
 PremiumManager.shared.configure(config)
@@ -435,7 +456,9 @@ struct TestConfiguration {
             monthly: "com.test.monthly",
             yearly: "com.test.yearly"
         ),
-        features: ["Test Feature"],
+        features: [
+            .init(title: "Test Feature", systemImageName: "star.fill")
+        ],
         enableDebugMode: true,
         cacheKey: "test_premium_status"
     )
@@ -446,11 +469,11 @@ struct TestConfiguration {
 
 ```swift
 enum AppFeatures {
-    static let premiumFeatures = [
-        "Unlimited exports",
-        "Advanced analytics",
-        "Priority support",
-        "Custom themes"
+    static let premiumFeatures: [PremiumManager.Feature] = [
+        .init(title: "Unlimited exports", systemImageName: "square.and.arrow.up"),
+        .init(title: "Advanced analytics", systemImageName: "chart.xyaxis.line"),
+        .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+        .init(title: "Custom themes", systemImageName: "paintbrush.pointed")
     ]
 }
 
@@ -477,7 +500,7 @@ var currentConfiguration: Configuration { get }
 ```swift
 struct Configuration {
     var productIdentifiers: ProductIdentifiers
-    var features: [String]
+    var features: [PremiumManager.Feature]
     var enableDebugMode: Bool
     var cacheKey: String
     
@@ -486,6 +509,17 @@ struct Configuration {
     static var production: Configuration
     
     func validate() throws
+}
+```
+
+### Feature
+
+```swift
+struct Feature {
+    let title: String
+    let systemImageName: String
+    
+    init(title: String, systemImageName: String)
 }
 ```
 
@@ -509,7 +543,7 @@ struct ProductIdentifiers {
 ```swift
 struct PaywallConfiguration {
     var headline: String
-    var features: [String]
+    var features: [PremiumManager.Feature]
     var showRestoreButton: Bool
     var showPrivacyLinks: Bool
     var tintColor: Color?
@@ -532,7 +566,9 @@ Enable debug mode to see configuration details:
 ```swift
 let config = Configuration(
     productIdentifiers: .default,
-    features: ["Feature 1"],
+    features: [
+        .init(title: "Feature 1", systemImageName: "star.fill")
+    ],
     enableDebugMode: true  // 👈 Enable verbose logging
 )
 ```

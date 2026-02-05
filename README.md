@@ -72,9 +72,9 @@ struct YourApp: App {
                 lifetime: "com.yourapp.premium.lifetime"
             ),
             features: [
-                "Unlimited access",
-                "Priority support",
-                "Cloud sync"
+                .init(title: "Unlimited access", systemImageName: "infinity"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+                .init(title: "Cloud sync", systemImageName: "icloud")
             ]
         )
         PremiumManager.shared.configure(config)
