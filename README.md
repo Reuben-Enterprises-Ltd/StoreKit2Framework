@@ -40,6 +40,46 @@ Then add it to your target's dependencies:
 - Swift 6.2+
 - Xcode 16+
 
+## 🎯 Quick Start
+
+### Try the Example App
+
+The fastest way to see the framework in action:
+
+```bash
+cd Examples/DemoApp
+open DemoApp.xcodeproj
+```
+
+Select a simulator and press ⌘R. The example app demonstrates all integration patterns with comprehensive inline documentation.
+
+[→ Full Example App Documentation](Examples/DemoApp/README.md)
+
+### Basic Integration
+
+```swift
+// 1. Initialize in your app
+import StoreKit2Framework
+
+@main
+struct YourApp: App {
+    init() {
+        PremiumManager.shared.ensureInitialized()
+    }
+}
+
+// 2. Show paywall
+.sheet(isPresented: $showPaywall) {
+    PaywallView()
+}
+
+// 3. Gate features
+PremiumFeature()
+    .premiumRequired()
+```
+
+[→ Complete Integration Guide](QUICK_START.md)
+
 ## 🚧 Status: Core Features Implemented
 
 This repository contains a production-ready StoreKit 2 framework with core functionality implemented.
@@ -59,11 +99,18 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - StoreKit configuration file for local testing
 - Mock objects and test helpers
 - Debug tools and documentation
-
-### 🚧 In Progress
-- Example app/demo
+- **Example app/demo** - Complete DemoApp showing all integration patterns
 
 ## 📋 What's Here
+
+### Examples
+- **`Examples/DemoApp/`** - Complete iOS app demonstrating all framework features:
+  - Framework initialization
+  - Onboarding with paywall integration
+  - Settings with premium management
+  - Feature gating patterns (hide, disable, overlay)
+  - Purchase flows and subscription management
+  - [Full Documentation](Examples/DemoApp/README.md)
 
 ### Documentation
 - **`STOREKIT_COPILOT_AGENT_GUIDE.md`** - Comprehensive guide on StoreKit 2 implementation patterns
