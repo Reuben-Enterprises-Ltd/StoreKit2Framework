@@ -18,16 +18,11 @@
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
-/* Begin PBXBuildFile section */
-		2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework in Frameworks */ = {isa = PBXBuildFile; productRef = 2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		2A000007000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
