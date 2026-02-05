@@ -409,16 +409,17 @@ public struct PaywallView: View {
             HStack(spacing: 12) {
                 if let privacyURL = privacyPolicyURL {
                     Link(String(localized: "Privacy", comment: "Link to privacy policy"), destination: privacyURL)
-                }
-                
-                if privacyPolicyURL != nil {
+                    
+                    // Show separator only when privacy link is present
                     Text("•")
                         .foregroundStyle(.secondary)
                 }
                 
                 // Use provided terms URL or Apple's standard EULA
-                let termsURL = termsOfServiceURL ?? URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
-                Link(String(localized: "Terms", comment: "Link to terms of service/EULA"), destination: termsURL)
+                // Apple's EULA URL is stable and documented, but handle gracefully
+                if let termsURL = termsOfServiceURL ?? URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/") {
+                    Link(String(localized: "Terms", comment: "Link to terms of service/EULA"), destination: termsURL)
+                }
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
@@ -626,7 +627,9 @@ public struct ProductOptionButton: View {
         if let subscription = product.subscription,
            subscription.subscriptionPeriod.unit == .year,
            let monthlyPrice = calculateMonthlyPrice(product.price) {
-            return String(localized: "\(monthlyPrice)/month", comment: "Monthly price breakdown for yearly subscription")
+            // Use a format string for proper localization
+            let format = String(localized: "%@/month", comment: "Monthly price breakdown for yearly subscription - %@ is replaced with price")
+            return String(format: format, monthlyPrice)
         }
         
         // For monthly subscriptions, show per month
