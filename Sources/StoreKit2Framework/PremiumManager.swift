@@ -40,13 +40,27 @@ public final class PremiumManager {
         }
     }
     
+    /// A displayable benefit/feature shown in the paywall
+    public struct Feature {
+        /// The user-facing title of the feature (e.g., "Cloud Sync")
+        public let title: String
+        /// The SF Symbol name used to represent the feature visually
+        public let systemImageName: String
+        
+        /// Public initializer so apps can provide custom features in configuration
+        public init(title: String, systemImageName: String) {
+            self.title = title
+            self.systemImageName = systemImageName
+        }
+    }
+    
     /// Configuration for the PremiumManager
     public struct Configuration {
         /// Product identifiers to use
         public var productIdentifiers: ProductIdentifiers
         
         /// List of features/benefits for display in paywall
-        public var features: [String]
+        public var features: [PremiumManager.Feature]
         
         /// Enable debug mode (verbose logging, etc.)
         public var enableDebugMode: Bool
@@ -59,10 +73,10 @@ public final class PremiumManager {
             Configuration(
                 productIdentifiers: .default,
                 features: [
-                    "Advanced Analytics",
-                    "Cloud Sync",
-                    "Premium Themes",
-                    "Priority Support"
+                    .init(title: "Advanced Analytics", systemImageName: ""),
+                    .init(title: "Cloud Sync", systemImageName: ""),
+                    .init(title: "Premium Themes", systemImageName: ""),
+                    .init(title: "Priority Support", systemImageName: ""),
                 ],
                 enableDebugMode: false,
                 cacheKey: "premium_status"
@@ -86,7 +100,7 @@ public final class PremiumManager {
         /// Initialize with custom configuration
         public init(
             productIdentifiers: ProductIdentifiers = .default,
-            features: [String] = [],
+            features: [PremiumManager.Feature] = [],
             enableDebugMode: Bool = false,
             cacheKey: String = "premium_status"
         ) {
@@ -469,3 +483,4 @@ public enum ConfigurationError: Error, LocalizedError {
     }
 }
 #endif
+

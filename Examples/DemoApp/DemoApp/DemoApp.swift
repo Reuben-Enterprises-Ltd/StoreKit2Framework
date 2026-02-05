@@ -18,12 +18,12 @@ struct DemoApp: App {
                 lifetime: "com.yourcompany.yourapp.lifetime"
             ),
             features: [
-                "Unlimited exports",
-                "Advanced analytics",
-                "Cloud sync",
-                "Priority support",
-                "Remove ads",
-                "Custom themes"
+                .init(title: "Unlimited exports", systemImageName: "square.and.arrow.up"),
+                .init(title: "Advanced analytics", systemImageName: "chart.xyaxis.line"),
+                .init(title: "Cloud sync", systemImageName: "icloud.and.arrow.up"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+                .init(title: "Remove ads", systemImageName: "nosign"),
+                .init(title: "Custom themes", systemImageName: "paintbrush.pointed")
             ],
             enableDebugMode: true,
             cacheKey: "demo_app_premium_status"

@@ -10,7 +10,7 @@ public struct PaywallConfiguration {
     public var headline: String
     
     /// Custom features/benefits list
-    public var features: [String]
+    public var features: [PremiumManager.Feature]
     
     /// Whether to show the restore purchases button
     public var showRestoreButton: Bool
@@ -35,7 +35,7 @@ public struct PaywallConfiguration {
     /// Initialize with custom configuration
     public init(
         headline: String = "Unlock Premium Features",
-        features: [String] = [],
+        features: [PremiumManager.Feature] = [],
         showRestoreButton: Bool = true,
         showPrivacyLinks: Bool = true,
         tintColor: Color? = nil
@@ -117,7 +117,9 @@ public struct PaywallView: View {
         
         self.configuration = PaywallConfiguration(
             headline: headline ?? "Unlock Premium Features",
-            features: benefits?.map { $0.title } ?? managerConfig.features,
+            features: benefits?.map { benefit in
+                    .init(title: benefit.title, systemImageName: benefit.icon)
+            } ?? managerConfig.features,
             showRestoreButton: true,
             showPrivacyLinks: true,
             tintColor: nil
@@ -256,8 +258,8 @@ public struct PaywallView: View {
         if !configuration.features.isEmpty {
             return configuration.features.enumerated().map { index, feature in
                 BenefitItem(
-                    icon: Self.defaultFeatureIcons[index % Self.defaultFeatureIcons.count],
-                    title: feature,
+                    icon: feature.systemImageName,
+                    title: feature.title,
                     description: ""
                 )
             }
