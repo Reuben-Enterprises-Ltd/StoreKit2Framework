@@ -8,7 +8,15 @@ import Foundation
 /// ## Topics
 ///
 /// ### Getting Started
-/// - Documentation will be added as the framework is implemented
+/// - ``PremiumManager`` - The main manager class for handling all StoreKit operations
+/// - ``StoreError`` - Error types for StoreKit operations
+///
+/// ### Core Functionality
+/// - Product loading from App Store
+/// - Purchase processing with transaction verification
+/// - Restore purchases functionality
+/// - Real-time transaction monitoring
+/// - Premium status caching for instant UI updates
 ///
 public struct StoreKit2Framework {
     /// The version of the StoreKit2Framework
