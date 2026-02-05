@@ -2,7 +2,45 @@
 
 A modern, reusable Swift Package for implementing StoreKit 2 subscriptions in iOS apps.
 
-## 🚧 Status: Investigation Complete - Implementation Pending
+## 🚀 Installation
+
+### Swift Package Manager
+
+You can add StoreKit2Framework to your iOS project using Swift Package Manager:
+
+#### Xcode
+
+1. In Xcode, select **File** → **Add Package Dependencies...**
+2. Enter the package URL: `https://github.com/Reuben-Enterprises-Ltd/StoreKit2Framework.git`
+3. Select the version you want to use
+4. Click **Add Package**
+
+#### Package.swift
+
+Add the following to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/Reuben-Enterprises-Ltd/StoreKit2Framework.git", from: "0.1.0")
+]
+```
+
+Then add it to your target's dependencies:
+
+```swift
+.target(
+    name: "YourTarget",
+    dependencies: ["StoreKit2Framework"]
+)
+```
+
+### Requirements
+
+- iOS 18.0+
+- Swift 6.2+
+- Xcode 16+
+
+## 🚧 Status: Foundation Complete - Core Implementation In Progress
 
 This repository contains the investigation and planning documents for creating a reusable StoreKit2 framework that can be dropped into any iOS project.
 
@@ -232,23 +270,16 @@ This project follows strict Swift and SwiftUI guidelines:
 
 See [AGENTS.md](AGENTS.md) for complete guidelines.
 
-## 📋 Requirements
-
-- iOS 18.0+
-- Swift 6.2+
-- Xcode 15+
-- StoreKit 2
-
 ## 📄 License
 
-*To be determined*
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🗺️ Next Steps
 
 1. ✅ Investigation complete
 2. ✅ Issues created
-3. ⏳ Start with Issue #001 (Package foundation)
-4. ⏳ Implement core functionality
+3. ✅ Issue #001 Complete (Package foundation)
+4. ⏳ Implement core functionality (Issue #002)
 5. ⏳ Create UI components
 6. ⏳ Add tests and documentation
 7. ⏳ Release v1.0.0
