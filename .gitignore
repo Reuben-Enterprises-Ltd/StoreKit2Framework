@@ -8,6 +8,9 @@ xcuserdata/
 *.xcworkspace
 *.xcodeproj
 
+# Exception: Allow example app project
+!Examples/DemoApp/DemoApp.xcodeproj
+
 # macOS
 .DS_Store
 
