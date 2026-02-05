@@ -340,6 +340,13 @@ See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md), [PREMIUM_SETTINGS_USAGE.md](
 - **Documentation**: Extensive guides and examples
 - **Debug Mode**: Test premium features without purchasing
 
+### Advanced Features (Optional)
+- **Analytics Integration**: ✅ Track premium events with your analytics service
+- **Offline Grace Period**: ✅ Configurable offline access duration
+- **Promotional Offers**: 🚧 Support for introductory and promotional offers (coming soon)
+
+See [ADVANCED_FEATURES.md](ADVANCED_FEATURES.md) for detailed documentation.
+
 ## 📈 Implementation Timeline
 
 ### Phase 1: Foundation (10-12 hours)

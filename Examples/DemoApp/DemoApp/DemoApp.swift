@@ -26,7 +26,8 @@ struct DemoApp: App {
                 .init(title: "Custom themes", systemImageName: "paintbrush.pointed")
             ],
             enableDebugMode: true,
-            cacheKey: "demo_app_premium_status"
+            cacheKey: "demo_app_premium_status",
+            analytics: ExampleAnalytics.shared
         )
         
         // Apply configuration before initialization

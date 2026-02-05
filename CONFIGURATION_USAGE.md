@@ -552,6 +552,50 @@ struct PaywallConfiguration {
 }
 ```
 
+## Advanced Features
+
+The framework supports optional advanced features that enhance functionality without impacting the core behavior.
+
+### Analytics Integration
+
+Track premium events with your analytics service:
+
+```swift
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
+    analytics: MyAnalytics()  // Your PremiumAnalytics implementation
+)
+```
+
+### Offline Grace Period
+
+Allow offline access for a specified duration:
+
+```swift
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
+    offlineGracePeriod: 604800  // 7 days in seconds
+)
+```
+
+### Promotional Offers
+
+Enable promotional offers support:
+
+```swift
+let config = PremiumManager.Configuration(
+    productIdentifiers: .default,
+    features: [],
+    enablePromotionalOffers: true
+)
+```
+
+For detailed information, see [ADVANCED_FEATURES.md](ADVANCED_FEATURES.md).
+
+---
+
 ## Troubleshooting
 
 ### Configuration Not Taking Effect
