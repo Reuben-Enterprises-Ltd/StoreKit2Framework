@@ -96,7 +96,7 @@
 			mainGroup = 2A000008000000000000001;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */,
+				2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../.." */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A000009000000000000001 /* Products */;
@@ -332,16 +332,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */ = {
+		2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../.." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../StoreKit2Framework;
+			relativePath = ../..;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */;
+			package = 2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../.." */;
 			productName = StoreKit2Framework;
 		};
 /* End XCSwiftPackageProductDependency section */
