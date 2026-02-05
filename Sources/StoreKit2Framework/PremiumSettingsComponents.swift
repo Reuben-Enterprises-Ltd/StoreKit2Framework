@@ -188,7 +188,11 @@ public struct PremiumSettingsSection: View {
         } else if productId == PremiumManager.ProductIdentifiers.yearly {
             return "Yearly"
         } else if productId == PremiumManager.ProductIdentifiers.lifetime {
+            #if DEBUG
+            return "Lifetime (10min test)"
+            #else
             return "Lifetime"
+            #endif
         }
         
         return nil
@@ -197,10 +201,20 @@ public struct PremiumSettingsSection: View {
     private var renewalDateText: String? {
         guard let activeEntitlement = premiumManager.activeEntitlement else { return nil }
         
-        // For lifetime, show no renewal date
+        // For lifetime non-renewing subscription, show expiration in debug mode
         guard case .verified(let transaction) = activeEntitlement.transaction else { return nil }
         if transaction.productID == PremiumManager.ProductIdentifiers.lifetime {
+            #if DEBUG
+            // Show expiration time in debug mode (10 minutes from purchase)
+            let debugExpirationInterval: TimeInterval = 10 * 60 // 10 minutes
+            let expirationDate = transaction.purchaseDate.addingTimeInterval(debugExpirationInterval)
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            return "Expires: \(formatter.string(from: expirationDate))"
+            #else
             return nil
+            #endif
         }
         
         // For subscriptions, show renewal info
@@ -315,7 +329,11 @@ public struct PremiumStatusRow: View {
         } else if productId == PremiumManager.ProductIdentifiers.yearly {
             return "Yearly Subscription"
         } else if productId == PremiumManager.ProductIdentifiers.lifetime {
-            return "Lifetime Purchase"
+            #if DEBUG
+            return "Lifetime (10min test)"
+            #else
+            return "Lifetime Subscription"
+            #endif
         }
         
         return nil

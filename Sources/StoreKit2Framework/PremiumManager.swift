@@ -38,7 +38,7 @@ public final class PremiumManager {
     
     // MARK: - Private State
     
-    /// Active subscription or lifetime purchase
+    /// Active subscription or lifetime non-renewing subscription
     public private(set) var activeEntitlement: Product.SubscriptionInfo.Status?
     
     /// Transaction update task
@@ -181,10 +181,23 @@ public final class PremiumManager {
             do {
                 let transaction = try checkVerified(result)
                 
-                // Check for lifetime purchase
+                // Check for lifetime non-renewing subscription
                 if transaction.productID == ProductIdentifiers.lifetime {
+                    #if DEBUG
+                    // In debug mode, lifetime expires after 10 minutes for testing
+                    let debugExpirationInterval: TimeInterval = 10 * 60 // 10 minutes
+                    let purchaseDate = transaction.purchaseDate
+                    let expirationDate = purchaseDate.addingTimeInterval(debugExpirationInterval)
+                    
+                    if Date() < expirationDate {
+                        hasActiveEntitlement = true
+                        break
+                    }
+                    #else
+                    // In production, lifetime never expires
                     hasActiveEntitlement = true
                     break
+                    #endif
                 }
                 
                 // Check for active subscription

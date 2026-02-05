@@ -192,7 +192,9 @@ The demo includes a StoreKit configuration file with test products:
 
 - **Monthly Premium**: $4.99/month
 - **Yearly Premium**: $39.99/year (Best Value)
-- **Lifetime Premium**: $24.99 (One-time)
+- **Lifetime Premium**: $24.99 (Non-renewing subscription - expires after 10 minutes in DEBUG mode for testing)
+
+> **Note for Testing**: In DEBUG builds, the lifetime subscription automatically expires 10 minutes after purchase. This allows you to test subscription expiration, UI updates, and re-purchase flows without waiting. In production/release builds, the lifetime subscription never expires.
 
 To test purchases in the simulator:
 
