@@ -260,15 +260,14 @@ struct ContentView: View {
             showPaywall = true
         }
         .sheet(isPresented: $showPaywall) {
-            PaywallView(
-                privacyPolicyURL: URL(string: "https://yourapp.com/privacy")!,
-                termsOfServiceURL: URL(string: "https://yourapp.com/terms")!,
-                analyticsSource: "main_screen"
-            )
+            // PaywallView uses legal URLs from Configuration
+            PaywallView(analyticsSource: "main_screen")
         }
     }
 }
 ```
+
+**Note:** Legal URLs (privacy policy and terms) are now configured in `PremiumManager.Configuration` during app initialization, not passed to each PaywallView.
 
 ### 2. Customizing the Paywall
 
@@ -288,10 +287,9 @@ let config = PaywallConfiguration(
 
 PaywallView(
     configuration: config,
-    privacyPolicyURL: privacyURL,
-    termsOfServiceURL: termsURL,
     analyticsSource: "onboarding"
 )
+// Legal URLs are automatically loaded from PremiumManager.Configuration
 ```
 
 ### 3. Settings Integration

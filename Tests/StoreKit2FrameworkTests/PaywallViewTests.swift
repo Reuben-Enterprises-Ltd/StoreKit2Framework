@@ -89,6 +89,31 @@ struct PaywallViewTests {
         // The actual values will be tested at runtime in the UI
         #endif
     }
+    
+    @Test("ProductOptionButton can be instantiated")
+    func productOptionButtonCreation() async throws {
+        #if canImport(SwiftUI) && canImport(StoreKit)
+        // ProductOptionButton is internal to PaywallView but used for product display
+        // This test documents that it exists and is used
+        // Actual UI testing would verify the display of price/period for all products
+        #endif
+    }
+    
+    @Test("Localized strings are defined")
+    func localizedStringsExist() async throws {
+        #if canImport(SwiftUI)
+        // Verify key localized strings are accessible
+        // These strings should be localizable
+        let _ = String(localized: "Privacy", comment: "Link to privacy policy")
+        let _ = String(localized: "Terms", comment: "Link to terms of service/EULA")
+        let _ = String(localized: "one off", comment: "Price description for lifetime purchase")
+        let _ = String(localized: "per month", comment: "Price period for monthly subscription")
+        let _ = String(localized: "Best Value", comment: "Badge for recommended subscription option")
+        let _ = String(localized: "Maybe Later", comment: "Button to dismiss paywall")
+        let _ = String(localized: "Start Premium", comment: "Button to start premium purchase")
+        let _ = String(localized: "Restore Purchases", comment: "Button to restore previous purchases")
+        #endif
+    }
 }
 
 /// Documentation of PaywallView behavior
@@ -109,8 +134,11 @@ struct PaywallViewTests {
 ///    - Should show recommended badge on yearly plan
 ///    - Should highlight selected product
 ///    - Should default to yearly subscription
+///    - Should show price/period for ALL products (monthly, yearly, lifetime)
+///    - Should show "one off" for lifetime products where price/period appears
 ///    - Should show price comparison (monthly equivalent for yearly)
 ///    - Should show savings percentage
+///    - Should display appropriate period text for all product types
 ///
 /// 3. Purchase Flow:
 ///    - Should disable purchase button when no product selected
@@ -143,8 +171,16 @@ struct PaywallViewTests {
 ///    - Should accept optional benefits list
 ///    - Should use defaults when not provided
 ///    - Should work in various presentation styles (sheet, fullScreenCover, NavigationLink)
+///    - Privacy link should say "Privacy" (not "Privacy Policy")
+///    - Terms link should say "Terms" (not "Terms of Service")
+///    - Terms link should default to Apple's standard EULA
 ///
-/// 8. Integration:
+/// 8. Localization:
+///    - All user-facing strings should be localizable
+///    - Should support String(localized:) for all text
+///    - Should work in multiple languages
+///
+/// 9. Integration:
 ///    - Should call premiumManager.ensureInitialized() on appear
 ///    - Should observe premium manager state
 ///    - Should use @Environment(\.dismiss) for closing

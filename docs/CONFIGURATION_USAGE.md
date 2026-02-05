@@ -119,7 +119,9 @@ let config = PremiumManager.Configuration(
         .init(title: "Feature 2", systemImageName: "bolt.fill")
     ],
     enableDebugMode: false,
-    cacheKey: "premium_status"
+    cacheKey: "premium_status",
+    privacyPolicyURL: URL(string: "https://myapp.com/privacy")!,
+    termsOfServiceURL: URL(string: "https://myapp.com/terms")!
 )
 ```
 
@@ -128,6 +130,12 @@ let config = PremiumManager.Configuration(
 - `features: [PremiumManager.Feature]` - List of features/benefits for paywall with custom SF Symbol icons
 - `enableDebugMode: Bool` - Enable verbose logging
 - `cacheKey: String` - UserDefaults key for caching premium status
+- `privacyPolicyURL: URL` - Privacy policy URL (default: `https://support.reubenenterprises.com/privacy`)
+- `termsOfServiceURL: URL` - Terms of service URL (default: Apple's EULA)
+
+**Default Legal URLs:**
+- Privacy: `https://support.reubenenterprises.com/privacy`
+- Terms: `https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`
 
 **Presets:**
 ```swift
@@ -294,9 +302,9 @@ struct ContentView: View {
                     showRestoreButton: true,
                     showPrivacyLinks: true,
                     tintColor: .purple
-                ),
-                privacyPolicyURL: URL(string: "https://myapp.com/privacy"),
-                termsOfServiceURL: URL(string: "https://myapp.com/terms")
+                )
+                // Legal URLs are automatically loaded from Configuration
+                // No need to pass privacyPolicyURL or termsOfServiceURL
             )
         }
     }
@@ -305,27 +313,35 @@ struct ContentView: View {
 
 ### Example 5: Using PremiumManager Configuration in Paywall
 
-The PaywallView automatically uses features from PremiumManager configuration:
+The PaywallView automatically uses features and legal URLs from PremiumManager configuration:
 
 ```swift
-// In app init
+// In app init - configure legal URLs once
 let config = PremiumManager.Configuration(
     productIdentifiers: .default,
     features: [
         .init(title: "Feature A", systemImageName: "a.circle.fill"),
         .init(title: "Feature B", systemImageName: "b.circle.fill"),
         .init(title: "Feature C", systemImageName: "c.circle.fill")
-    ]
+    ],
+    privacyPolicyURL: URL(string: "https://myapp.com/privacy")!,
+    termsOfServiceURL: URL(string: "https://myapp.com/terms")!
 )
 PremiumManager.shared.configure(config)
 
-// In your view - features will be automatically pulled from config
+// In your views - legal URLs are automatically pulled from config
 .sheet(isPresented: $showPaywall) {
-    PaywallView(
-        privacyPolicyURL: URL(string: "https://myapp.com/privacy"),
-        termsOfServiceURL: URL(string: "https://myapp.com/terms")
-    )
+    PaywallView()  // Uses configuration defaults
 }
+```
+
+**Note:** Legal URLs can still be overridden per-paywall if needed:
+```swift
+PaywallView(
+    privacyPolicyURL: URL(string: "https://different.com/privacy"),
+    termsOfServiceURL: URL(string: "https://different.com/terms")
+)
+// However, this is deprecated. Configure URLs in PremiumManager.Configuration instead.
 ```
 
 ## Validation

@@ -301,6 +301,11 @@ public final class PremiumManager {
     /// - ``enableDebugMode``
     /// - ``cacheKey``
     ///
+    /// ### Legal & Compliance
+    ///
+    /// - ``privacyPolicyURL``
+    /// - ``termsOfServiceURL``
+    ///
     /// ### Advanced Features
     ///
     /// - ``analytics``
@@ -399,6 +404,47 @@ public final class PremiumManager {
         /// - Note: Requires additional App Store Connect configuration.
         public var enablePromotionalOffers: Bool
         
+        /// Privacy policy URL displayed in paywall.
+        ///
+        /// The privacy policy link is shown at the bottom of the paywall
+        /// to comply with App Store requirements.
+        ///
+        /// Defaults to `https://support.reubenenterprises.com/privacy` if not specified.
+        ///
+        /// ## Example
+        ///
+        /// ```swift
+        /// let config = Configuration(
+        ///     productIdentifiers: .default,
+        ///     features: [],
+        ///     privacyPolicyURL: URL(string: "https://myapp.com/privacy")
+        /// )
+        /// ```
+        ///
+        /// - Note: Required for App Store submission
+        public var privacyPolicyURL: URL
+        
+        /// Terms of service URL displayed in paywall.
+        ///
+        /// The terms link is shown at the bottom of the paywall
+        /// to comply with App Store requirements.
+        ///
+        /// Defaults to Apple's standard EULA if not specified:
+        /// `https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`
+        ///
+        /// ## Example
+        ///
+        /// ```swift
+        /// let config = Configuration(
+        ///     productIdentifiers: .default,
+        ///     features: [],
+        ///     termsOfServiceURL: URL(string: "https://myapp.com/terms")
+        /// )
+        /// ```
+        ///
+        /// - Note: Required for App Store submission
+        public var termsOfServiceURL: URL
+        
         /// Default configuration
         public static var `default`: Configuration {
             Configuration(
@@ -413,7 +459,9 @@ public final class PremiumManager {
                 cacheKey: "premium_status",
                 analytics: nil,
                 offlineGracePeriod: 86400, // 24 hours
-                enablePromotionalOffers: false
+                enablePromotionalOffers: false,
+                privacyPolicyURL: URL(string: "https://support.reubenenterprises.com/privacy")!,
+                termsOfServiceURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
             )
         }
         
@@ -439,7 +487,9 @@ public final class PremiumManager {
             cacheKey: String = "premium_status",
             analytics: (any PremiumAnalytics)? = nil,
             offlineGracePeriod: TimeInterval = 86400,
-            enablePromotionalOffers: Bool = false
+            enablePromotionalOffers: Bool = false,
+            privacyPolicyURL: URL = URL(string: "https://support.reubenenterprises.com/privacy")!,
+            termsOfServiceURL: URL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
         ) {
             self.productIdentifiers = productIdentifiers
             self.features = features
@@ -448,6 +498,8 @@ public final class PremiumManager {
             self.analytics = analytics
             self.offlineGracePeriod = offlineGracePeriod
             self.enablePromotionalOffers = enablePromotionalOffers
+            self.privacyPolicyURL = privacyPolicyURL
+            self.termsOfServiceURL = termsOfServiceURL
         }
         
         /// Validate the configuration

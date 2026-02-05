@@ -28,6 +28,10 @@ struct DemoApp: App {
             enableDebugMode: true,
             cacheKey: "demo_app_premium_status",
             analytics: ExampleAnalytics.shared
+            // Legal URLs use defaults:
+            // - privacyPolicyURL: https://support.reubenenterprises.com/privacy
+            // - termsOfServiceURL: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+            // To customize, add: privacyPolicyURL: URL(string: "https://yourapp.com/privacy")!
         )
         
         // Apply configuration before initialization
