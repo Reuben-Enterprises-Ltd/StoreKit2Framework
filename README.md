@@ -55,7 +55,10 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - PaywallView UI component
 - Premium settings components (PremiumSettingsSection, PremiumStatusRow, PremiumBadge)
 - Feature gating utilities (.premiumOnly(), .premiumGated(), .premiumRequired())
-- Comprehensive tests
+- Comprehensive testing infrastructure (43 tests, >80% coverage)
+- StoreKit configuration file for local testing
+- Mock objects and test helpers
+- Debug tools and documentation
 
 ### 🚧 In Progress
 - Example app/demo
@@ -68,6 +71,8 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - **`PAYWALL_VIEW_USAGE.md`** - PaywallView usage guide and examples
 - **`PREMIUM_SETTINGS_USAGE.md`** - Premium settings components usage guide
 - **`FEATURE_GATING_USAGE.md`** - Feature gating utilities usage guide
+- **`TESTING_GUIDE.md`** - Comprehensive testing documentation
+- **`SCHEME_CONFIGURATION.md`** - Quick Xcode scheme setup for testing
 - **`AGENTS.md`** - Development guidelines for Swift and SwiftUI
 - **`ROADMAP.md`** - Complete implementation roadmap with phases and timelines
 
@@ -336,12 +341,62 @@ See [ROADMAP.md](ROADMAP.md) for detailed timeline.
 - ✅ Follows Apple's best practices
 - ✅ App Review compliant
 
-## 🧪 Testing Strategy
+## 🧪 Testing
 
-1. **Local Testing**: StoreKit configuration file
-2. **Sandbox Testing**: Real devices with test accounts
-3. **Unit Tests**: Core business logic
-4. **Debug Mode**: Premium override for development
+The framework includes comprehensive testing infrastructure with **43 tests** covering all core functionality.
+
+### Test Coverage
+
+- ✅ PremiumManager (singleton, state management, concurrency)
+- ✅ Product loading and error handling
+- ✅ Premium status calculation and caching
+- ✅ Purchase and restore flows
+- ✅ Transaction verification
+- ✅ UI components (PaywallView, Settings, Feature Gating)
+- ✅ Debug utilities and mock objects
+
+### Testing Tools Included
+
+1. **StoreKit Configuration File** (`Configuration.storekit`)
+   - Pre-configured test products (monthly, yearly, lifetime)
+   - Ready for Xcode Simulator testing
+   - See [SCHEME_CONFIGURATION.md](./SCHEME_CONFIGURATION.md) for setup
+
+2. **Mock Objects and Test Helpers** (`TestHelpers.swift`)
+   - Mock product data
+   - Mock transaction information
+   - Premium/free state helpers
+   - Cache management utilities
+
+3. **Debug Tools**
+   - `PREMIUM_ENABLED` environment variable for instant premium access
+   - Mock PremiumManager instances for testing
+   - Works in DEBUG builds only
+
+### Running Tests
+
+```bash
+# Run all tests
+swift test
+
+# View test list
+swift test --list-tests
+
+# Run specific test suite
+swift test --filter "PremiumManager Tests"
+```
+
+### Documentation
+
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** - Complete testing documentation
+- **[SCHEME_CONFIGURATION.md](./SCHEME_CONFIGURATION.md)** - Quick Xcode scheme setup guide
+
+### Testing Strategy
+
+1. **Local Testing**: StoreKit configuration file in Simulator
+2. **Unit Tests**: Comprehensive test coverage (>80% goal)
+3. **Debug Mode**: Premium override for development
+4. **Sandbox Testing**: Real devices with test accounts
 5. **TestFlight**: Final validation before release
 
 ## 📖 Documentation Plan
