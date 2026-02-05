@@ -11,6 +11,8 @@ import StoreKit2Framework
 struct OnboardingView: View {
     @Environment(\.dismiss) private var dismiss
     
+    private let premiumManager = PremiumManager.shared
+    
     @State private var currentPage = 0
     @State private var showPaywall = false
     
@@ -109,7 +111,16 @@ struct OnboardingView: View {
             }
             .sheet(isPresented: $showPaywall) {
                 // Show paywall with custom headline for onboarding context
-                PaywallView(headline: "Start Your Premium Journey")
+                PaywallView(
+                    configuration: .init(
+                        headline: "Start Your Premium Journey",
+                        features: premiumManager.currentConfiguration.features,
+                        showRestoreButton: true,
+                        showPrivacyLinks: true,
+                        tintColor: nil
+                    ),
+                    analyticsSource: "onboarding"
+                )
             }
         }
     }
@@ -162,6 +173,15 @@ struct OnboardingPageView: View {
 #Preview("Paywall Sheet") {
     Text("Main View")
         .sheet(isPresented: .constant(true)) {
-            PaywallView(headline: "Start Your Premium Journey")
+            PaywallView(
+                configuration: .init(
+                    headline: "Start Your Premium Journey",
+                    features: [],
+                    showRestoreButton: true,
+                    showPrivacyLinks: true,
+                    tintColor: nil
+                ),
+                analyticsSource: "onboarding_preview"
+            )
         }
 }

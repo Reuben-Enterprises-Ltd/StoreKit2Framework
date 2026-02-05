@@ -124,7 +124,16 @@ struct FeatureListView: View {
             }
         }
         .sheet(isPresented: $showPaywall) {
-            PaywallView(headline: "Unlock All Premium Features")
+            PaywallView(
+                configuration: .init(
+                    headline: "Unlock All Premium Features",
+                    features: premiumManager.currentConfiguration.features,
+                    showRestoreButton: true,
+                    showPrivacyLinks: true,
+                    tintColor: nil
+                ),
+                analyticsSource: "feature_list"
+            )
         }
     }
     

@@ -68,6 +68,18 @@ public final class PremiumManager {
         /// Key for caching premium status in UserDefaults
         public var cacheKey: String
         
+        // MARK: - Advanced Features (Optional)
+        
+        /// Analytics delegate for tracking premium events (opt-in)
+        public var analytics: (any PremiumAnalytics)?
+        
+        /// Offline grace period in seconds (default: 24 hours)
+        /// Premium features remain accessible offline for this duration after last verification
+        public var offlineGracePeriod: TimeInterval
+        
+        /// Enable promotional offers support (default: false)
+        public var enablePromotionalOffers: Bool
+        
         /// Default configuration
         public static var `default`: Configuration {
             Configuration(
@@ -79,7 +91,10 @@ public final class PremiumManager {
                     .init(title: "Priority Support", systemImageName: ""),
                 ],
                 enableDebugMode: false,
-                cacheKey: "premium_status"
+                cacheKey: "premium_status",
+                analytics: nil,
+                offlineGracePeriod: 86400, // 24 hours
+                enablePromotionalOffers: false
             )
         }
         
@@ -102,12 +117,18 @@ public final class PremiumManager {
             productIdentifiers: ProductIdentifiers = .default,
             features: [PremiumManager.Feature] = [],
             enableDebugMode: Bool = false,
-            cacheKey: String = "premium_status"
+            cacheKey: String = "premium_status",
+            analytics: (any PremiumAnalytics)? = nil,
+            offlineGracePeriod: TimeInterval = 86400,
+            enablePromotionalOffers: Bool = false
         ) {
             self.productIdentifiers = productIdentifiers
             self.features = features
             self.enableDebugMode = enableDebugMode
             self.cacheKey = cacheKey
+            self.analytics = analytics
+            self.offlineGracePeriod = offlineGracePeriod
+            self.enablePromotionalOffers = enablePromotionalOffers
         }
         
         /// Validate the configuration
@@ -272,6 +293,9 @@ public final class PremiumManager {
                 print("  - Products: \(configuration.productIdentifiers.all)")
                 print("  - Features: \(configuration.features.count) features")
                 print("  - Debug mode: \(configuration.enableDebugMode)")
+                print("  - Analytics: \(configuration.analytics != nil ? "Enabled" : "Disabled")")
+                print("  - Offline grace period: \(configuration.offlineGracePeriod) seconds (\(String(format: "%.1f", configuration.offlineGracePeriod / 3600)) hours)")
+                print("  - Promotional offers: \(configuration.enablePromotionalOffers ? "Enabled" : "Disabled")")
             }
         } catch {
             // Log validation error but continue with current config
@@ -283,6 +307,14 @@ public final class PremiumManager {
     /// Access to current configuration (read-only)
     public var currentConfiguration: Configuration {
         configuration
+    }
+    
+    // MARK: - Analytics
+    
+    /// Track paywall shown event
+    /// - Parameter source: The source/context where paywall was shown (e.g., "onboarding", "settings", "feature_gate")
+    public func trackPaywallShown(source: String = "unknown") {
+        configuration.analytics?.trackPaywallShown(source: source)
     }
     
     deinit {
@@ -326,10 +358,15 @@ public final class PremiumManager {
             // Update premium status
             await updatePremiumStatus()
             
+            // Track successful purchase
+            configuration.analytics?.trackPurchaseCompleted(product: product)
+            
             // Finish the transaction
             await transaction.finish()
             
         case .userCancelled:
+            // Track cancellation
+            configuration.analytics?.trackPurchaseCancelled(product: product)
             break
             
         case .pending:
@@ -347,8 +384,12 @@ public final class PremiumManager {
         do {
             try await AppStore.sync()
             await updatePremiumStatus()
+            // Track successful restoration
+            configuration.analytics?.trackRestorePurchases(success: true)
         } catch {
             self.error = error
+            // Track failed restoration
+            configuration.analytics?.trackRestorePurchases(success: false)
             print("Failed to restore purchases: \(error)")
         }
     }
