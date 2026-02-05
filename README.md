@@ -54,10 +54,10 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - Premium status caching
 - PaywallView UI component
 - Premium settings components (PremiumSettingsSection, PremiumStatusRow, PremiumBadge)
+- Feature gating utilities (.premiumOnly(), .premiumGated(), .premiumRequired())
 - Comprehensive tests
 
 ### 🚧 In Progress
-- Feature gating utilities
 - Example app/demo
 
 ## 📋 What's Here
@@ -67,6 +67,7 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - **`PREMIUM_MANAGER_USAGE.md`** - PremiumManager usage guide and examples
 - **`PAYWALL_VIEW_USAGE.md`** - PaywallView usage guide and examples
 - **`PREMIUM_SETTINGS_USAGE.md`** - Premium settings components usage guide
+- **`FEATURE_GATING_USAGE.md`** - Feature gating utilities usage guide
 - **`AGENTS.md`** - Development guidelines for Swift and SwiftUI
 - **`ROADMAP.md`** - Complete implementation roadmap with phases and timelines
 
@@ -192,17 +193,30 @@ struct ContentView: View {
 
 ### 4. Gate Features
 
+Use convenient view modifiers for feature gating:
+
 ```swift
-struct PremiumFeatureView: View {
-    private let premiumManager = PremiumManager.shared
-    
+import SwiftUI
+import StoreKit2Framework
+
+struct FeaturesView: View {
     var body: some View {
-        if premiumManager.isPremium {
-            // Show premium content
-            AdvancedFeatureContent()
-        } else {
-            // Show upgrade prompt
-            PremiumLockedView()
+        VStack(spacing: 16) {
+            // Hide feature completely if not premium
+            NavigationLink("Advanced Settings") {
+                AdvancedSettingsView()
+            }
+            .premiumOnly()
+            
+            // Show with blur overlay if not premium
+            PremiumContentView()
+                .premiumGated(headline: "Unlock Advanced Features")
+            
+            // Disable with lock icon if not premium
+            Button("Export Data") {
+                exportData()
+            }
+            .premiumRequired()
         }
     }
 }
@@ -231,7 +245,7 @@ struct SettingsView: View {
 }
 ```
 
-See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md), [PREMIUM_SETTINGS_USAGE.md](PREMIUM_SETTINGS_USAGE.md), and [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) for complete guides.
+See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md), [PREMIUM_SETTINGS_USAGE.md](PREMIUM_SETTINGS_USAGE.md), [FEATURE_GATING_USAGE.md](FEATURE_GATING_USAGE.md), and [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) for complete guides.
 
 ## 📦 Features
 
@@ -248,7 +262,8 @@ See [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md), [PREMIUM_SETTINGS_USAGE.md](
 - **PremiumSettingsSection**: ✅ Complete settings section with status and actions
 - **PremiumStatusRow**: ✅ Compact row for List views
 - **PremiumBadge**: ✅ "Pro" badge indicator
-- **Feature Gating**: 🚧 Lock/unlock premium features (planned)
+- **Feature Gating**: ✅ Lock/unlock premium features (.premiumOnly(), .premiumGated(), .premiumRequired())
+- **PremiumOverlay**: ✅ Standalone overlay component for locked content
 
 ### Developer Experience
 - **Simple Setup**: One-line initialization
@@ -363,7 +378,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 4. ✅ Issue #002 Complete (Core PremiumManager)
 5. ✅ Issue #003 Complete (PaywallView UI)
 6. ✅ Issue #004 Complete (Settings Integration)
-7. 🚧 Issue #005: Feature Gating Utilities
+7. ✅ Issue #005 Complete (Feature Gating Utilities)
 8. ⏳ Issue #006: Testing Infrastructure
 9. ⏳ Issue #007: Example App/Demo
 10. ⏳ Release v1.0.0
