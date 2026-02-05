@@ -668,14 +668,58 @@ public final class PremiumManager {
         }
     }
     
-    /// Public method to ensure initialization
+    /// Initialize the PremiumManager and start monitoring transactions.
+    ///
+    /// Call this method once during app launch, after calling ``configure(_:)``.
+    /// It performs the following:
+    /// - Loads cached premium status for instant UI updates
+    /// - Starts listening for transaction updates
+    /// - Loads products from the App Store
+    /// - Verifies current premium status
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// @main
+    /// struct MyApp: App {
+    ///     init() {
+    ///         let config = PremiumManager.Configuration(...)
+    ///         PremiumManager.shared.configure(config)
+    ///         PremiumManager.shared.ensureInitialized()
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: Safe to call multiple times. Initialization only happens once.
     public func ensureInitialized() {
         startInitialization()
     }
     
-    /// Configure the PremiumManager with custom settings
+    /// Configure the PremiumManager with custom settings.
+    ///
+    /// Set your product IDs, features, and other configuration before initializing.
+    /// Configuration is immutable after initialization.
+    ///
     /// - Parameter config: The configuration to use
-    /// - Important: Must be called before `ensureInitialized()` to take effect
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let config = PremiumManager.Configuration(
+    ///     productIdentifiers: .init(
+    ///         monthly: "com.app.monthly",
+    ///         yearly: "com.app.yearly"
+    ///     ),
+    ///     features: [
+    ///         .init(title: "Cloud Sync", systemImageName: "icloud.fill")
+    ///     ],
+    ///     enableDebugMode: false
+    /// )
+    /// PremiumManager.shared.configure(config)
+    /// ```
+    ///
+    /// - Important: Must be called **before** ``ensureInitialized()`` to take effect.
+    /// - Throws: Prints warning if configuration is invalid but continues with previous config.
     public func configure(_ config: Configuration) {
         guard !hasStartedInitialization else {
             if configuration.enableDebugMode {
@@ -706,15 +750,46 @@ public final class PremiumManager {
         }
     }
     
-    /// Access to current configuration (read-only)
+    /// Access to the current configuration (read-only).
+    ///
+    /// Use this to read configuration values after setup.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let monthlyID = PremiumManager.shared.currentConfiguration.productIdentifiers.monthly
+    /// let features = PremiumManager.shared.currentConfiguration.features
+    /// ```
+    ///
+    /// - Note: Configuration is immutable after initialization.
     public var currentConfiguration: Configuration {
         configuration
     }
     
     // MARK: - Analytics
     
-    /// Track paywall shown event
-    /// - Parameter source: The source/context where paywall was shown (e.g., "onboarding", "settings", "feature_gate")
+    /// Track that a paywall was shown to the user.
+    ///
+    /// If analytics are configured, this notifies your analytics delegate.
+    /// Helps track conversion funnel and understand where users see the paywall.
+    ///
+    /// - Parameter source: The source/context where paywall was shown
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// PremiumManager.shared.trackPaywallShown(source: "onboarding")
+    /// PremiumManager.shared.trackPaywallShown(source: "feature_limit")
+    /// PremiumManager.shared.trackPaywallShown(source: "settings")
+    /// ```
+    ///
+    /// ## Common Sources
+    /// - `"onboarding"`: During initial app setup
+    /// - `"feature_limit"`: When user hits a limit
+    /// - `"settings"`: User-initiated from settings
+    /// - `"feature_gate"`: Attempting to access premium feature
+    ///
+    /// - Note: No-op if analytics are not configured.
     public func trackPaywallShown(source: String = "unknown") {
         configuration.analytics?.trackPaywallShown(source: source)
     }
@@ -725,7 +800,26 @@ public final class PremiumManager {
     
     // MARK: - Product Loading
     
-    /// Load available products from the App Store
+    /// Load available products from the App Store.
+    ///
+    /// Fetches products configured in ``Configuration/productIdentifiers``
+    /// and sorts them by price (lowest to highest).
+    ///
+    /// Usually called automatically during initialization.
+    /// Can be called manually to refresh products.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Button("Refresh Products") {
+    ///     Task {
+    ///         await premiumManager.loadProducts()
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: Sets ``isLoading`` to `true` during fetch and updates ``products`` on success.
+    /// - Note: Sets ``error`` if loading fails.
     public func loadProducts() async {
         isLoading = true
         error = nil
@@ -748,7 +842,42 @@ public final class PremiumManager {
     
     // MARK: - Purchase Flow
     
-    /// Purchase a product
+    /// Purchase a product.
+    ///
+    /// Handles the complete purchase flow:
+    /// 1. Initiates purchase with StoreKit
+    /// 2. Verifies transaction authenticity
+    /// 3. Updates premium status
+    /// 4. Tracks analytics (if configured)
+    /// 5. Finishes transaction
+    ///
+    /// - Parameter product: The product to purchase (from ``products`` array)
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Button("Subscribe") {
+    ///     Task {
+    ///         do {
+    ///             try await premiumManager.purchase(product)
+    ///             // Purchase successful
+    ///         } catch {
+    ///             // Handle error
+    ///             showError(error)
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Throws: ``PremiumError`` if purchase fails or verification fails
+    ///
+    /// ## Possible Outcomes
+    /// - **Success**: Purchase completes, premium is granted
+    /// - **User Cancelled**: User cancels in payment sheet (not an error)
+    /// - **Pending**: Requires action (e.g., parental approval)
+    /// - **Failed**: Network error, payment declined, etc. (throws error)
+    ///
+    /// - Note: Analytics events are tracked automatically if analytics delegate is configured.
     public func purchase(_ product: Product) async throws {
         let result = try await product.purchase()
         
@@ -781,7 +910,33 @@ public final class PremiumManager {
     
     // MARK: - Restore Purchases
     
-    /// Restore previous purchases
+    /// Restore previous purchases.
+    ///
+    /// Checks for existing entitlements and updates premium status.
+    /// Required by App Store guidelines to provide a restore option.
+    ///
+    /// Use this when:
+    /// - User reinstalls the app
+    /// - User switches devices
+    /// - User signs in with different Apple ID
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// Button("Restore Purchases") {
+    ///     Task {
+    ///         await premiumManager.restorePurchases()
+    ///         if premiumManager.isPremium {
+    ///             showSuccess("Purchases restored!")
+    ///         } else {
+    ///             showInfo("No purchases found")
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: Syncs with App Store and updates ``isPremium`` automatically.
+    /// - Note: Tracks analytics event if analytics delegate is configured.
     public func restorePurchases() async {
         do {
             try await AppStore.sync()
