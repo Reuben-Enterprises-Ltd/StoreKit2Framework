@@ -15,7 +15,7 @@ Create comprehensive README with:
 - Installation instructions (SPM)
 - Quick start guide (5-minute integration)
 - Links to detailed docs
-- Requirements (iOS 26+, Swift 6.2+)
+- Requirements (iOS 18+, Swift 6.2+)
 - License information
 - Contributing guidelines
 

@@ -129,7 +129,7 @@ Set required status checks:
 
 ## Technical Notes
 - Use GitHub-hosted runners (macOS)
-- Require Xcode 15+ for iOS 26 support
+- Require Xcode 15+ for iOS 18 support
 - Consider using `fastlane` for complex workflows
 - Set up branch protection rules
 - Require PR reviews before merge

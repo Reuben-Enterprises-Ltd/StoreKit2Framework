@@ -10,7 +10,7 @@ Set up the basic Swift Package structure for the StoreKit2Framework. This packag
 
 ### Package Structure
 - Create `Package.swift` with proper configuration
-  - Target iOS 26.0+
+  - Target iOS 18.0+
   - Swift 6.2+
   - Swift concurrency support
 - Define package name: `StoreKit2Framework`
@@ -44,7 +44,7 @@ StoreKit2Framework/
 
 ## Technical Notes
 - Use `.library(name: "StoreKit2Framework", targets: ["StoreKit2Framework"])` in products
-- Include platforms: `.iOS(.v26)`
+- Include platforms: `.iOS(.v18)`
 - Enable strict concurrency checking
 - Ensure it's a library package, not executable
 

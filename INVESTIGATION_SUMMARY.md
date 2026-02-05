@@ -64,7 +64,7 @@ Feature Gating
 
 The framework adheres to strict modern Swift guidelines:
 
-- ✅ iOS 26.0+ (Yes, it exists per project guidelines)
+- ✅ iOS 18.0+ 
 - ✅ Swift 6.2+ with strict concurrency
 - ✅ @Observable pattern (not ObservableObject)
 - ✅ @MainActor for all UI-facing code
@@ -183,7 +183,7 @@ AdvancedFeature()
 ### Immediate (Start Now)
 1. Begin with Issue #001: Swift Package Foundation
 2. Set up package structure
-3. Configure for iOS 26+ and Swift 6.2+
+3. Configure for iOS 18+ and Swift 6.2+
 
 ### Week 1 Goals
 - Complete package foundation
@@ -251,5 +251,5 @@ The framework design follows modern Swift best practices and will provide a seam
 
 **Investigation conducted by**: Copilot  
 **Based on**: STOREKIT_COPILOT_AGENT_GUIDE.md  
-**Target**: Reusable Swift Package for iOS 26+ apps  
+**Target**: Reusable Swift Package for iOS 18+ apps  
 **Estimated MVP completion**: 6-8 working days

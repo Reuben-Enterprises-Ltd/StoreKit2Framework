@@ -32,7 +32,7 @@ The `/issues` directory contains detailed implementation issues:
 ## 🎯 Project Goals
 
 Create a framework that:
-- ✅ Works with **iOS 26+** and **Swift 6.2+**
+- ✅ Works with **iOS 18+** and **Swift 6.2+**
 - ✅ Uses modern **@Observable** pattern (not ObservableObject)
 - ✅ Follows **strict Swift concurrency** rules
 - ✅ Provides **beautiful SwiftUI** components
@@ -223,7 +223,7 @@ See [ROADMAP.md](ROADMAP.md) for detailed timeline.
 ## 🤝 Contributing
 
 This project follows strict Swift and SwiftUI guidelines:
-- iOS 26.0+
+- iOS 18.0+
 - Swift 6.2+
 - Modern concurrency (async/await)
 - @Observable pattern
@@ -234,7 +234,7 @@ See [AGENTS.md](AGENTS.md) for complete guidelines.
 
 ## 📋 Requirements
 
-- iOS 26.0+
+- iOS 18.0+
 - Swift 6.2+
 - Xcode 15+
 - StoreKit 2

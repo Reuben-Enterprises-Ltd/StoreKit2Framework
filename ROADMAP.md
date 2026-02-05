@@ -8,7 +8,7 @@ This document provides a roadmap for implementing the StoreKit2Framework based o
 - Make it easy to drop into any iOS project
 - Provide UI components for paywall and settings
 - Enable simple feature gating
-- Follow modern Swift/SwiftUI best practices (iOS 26+, Swift 6.2+)
+- Follow modern Swift/SwiftUI best practices (iOS 18+, Swift 6.2+)
 
 ## Implementation Phases
 
@@ -18,7 +18,7 @@ This document provides a roadmap for implementing the StoreKit2Framework based o
 1. **Issue #001: Swift Package Foundation** (1-2h)
    - Create Package.swift
    - Set up directory structure
-   - Configure for iOS 26+ and Swift 6.2+
+   - Configure for iOS 18+ and Swift 6.2+
 
 2. **Issue #002: Core PremiumManager** (4-6h)
    - Implement singleton manager
@@ -169,7 +169,7 @@ The framework is ready when:
 - ✅ Documentation is comprehensive
 - ✅ Tests pass with >80% coverage
 - ✅ CI/CD pipeline works
-- ✅ Follows all project guidelines (Swift 6.2, iOS 26+)
+- ✅ Follows all project guidelines (Swift 6.2, iOS 18+)
 
 ## Dependencies
 
@@ -190,8 +190,8 @@ All above → 009 (CI/CD)
 ## Risk Assessment
 
 ### High Priority Risks
-1. **StoreKit 2 API Changes**: iOS 26 may have breaking changes
-   - Mitigation: Test early, follow WWDC updates
+1. **StoreKit 2 API Changes**: iOS 18 is stable and well-tested
+   - Mitigation: Follow Apple's documentation and best practices
 
 2. **Transaction Verification**: Critical for security
    - Mitigation: Comprehensive testing, follow Apple guidelines

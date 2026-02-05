@@ -44,7 +44,7 @@ Ensure you have:
 ```bash
 # 1. Create Package.swift
 # 2. Set up Sources/ directory structure
-# 3. Configure for iOS 26+
+# 3. Configure for iOS 18+
 # 4. Test that package builds
 ```
 
@@ -73,7 +73,7 @@ See issue #001 for detailed steps.
 ## 🔑 Key Principles to Follow
 
 ### From AGENTS.md:
-1. **iOS 26.0+** - Yes, it exists (per project requirements)
+1. **iOS 18.0+** - Target iOS 18 and later
 2. **Swift 6.2+** - Modern concurrency
 3. **@Observable** - Not ObservableObject
 4. **@MainActor** - For all UI-facing code
