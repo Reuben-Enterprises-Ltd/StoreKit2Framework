@@ -409,6 +409,44 @@ struct ConfigurationTests {
         #endif
     }
     
+    // MARK: - Legal URL Tests
+    
+    @Test("Configuration includes privacy policy URL")
+    func configurationHasPrivacyURL() async throws {
+        #if canImport(StoreKit)
+        let config = PremiumManager.Configuration.default
+        
+        #expect(config.privacyPolicyURL.absoluteString == "https://support.reubenenterprises.com/privacy")
+        #endif
+    }
+    
+    @Test("Configuration includes terms of service URL")
+    func configurationHasTermsURL() async throws {
+        #if canImport(StoreKit)
+        let config = PremiumManager.Configuration.default
+        
+        #expect(config.termsOfServiceURL.absoluteString == "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")
+        #endif
+    }
+    
+    @Test("Configuration accepts custom legal URLs")
+    func configurationWithCustomLegalURLs() async throws {
+        #if canImport(StoreKit)
+        let customPrivacy = URL(string: "https://example.com/privacy")!
+        let customTerms = URL(string: "https://example.com/terms")!
+        
+        let config = PremiumManager.Configuration(
+            productIdentifiers: .default,
+            features: [],
+            privacyPolicyURL: customPrivacy,
+            termsOfServiceURL: customTerms
+        )
+        
+        #expect(config.privacyPolicyURL == customPrivacy)
+        #expect(config.termsOfServiceURL == customTerms)
+        #endif
+    }
+    
     // MARK: - Integration Tests
     
     @Test("Configuration and PaywallConfiguration work together")

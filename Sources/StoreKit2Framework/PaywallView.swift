@@ -65,10 +65,12 @@ public struct PaywallView: View {
     /// Optional benefits list (deprecated - use configuration)
     public let benefits: [BenefitItem]?
     
-    /// Privacy policy URL (required for App Store submission)
+    /// Privacy policy URL (deprecated - use Configuration.privacyPolicyURL)
+    @available(*, deprecated, message: "Use Configuration.privacyPolicyURL instead")
     public let privacyPolicyURL: URL?
     
-    /// Terms of service URL (required for App Store submission)
+    /// Terms of service URL (deprecated - use Configuration.termsOfServiceURL)
+    @available(*, deprecated, message: "Use Configuration.termsOfServiceURL instead")
     public let termsOfServiceURL: URL?
     
     /// Source/context for analytics tracking (e.g., "onboarding", "settings", "feature_gate")
@@ -83,8 +85,8 @@ public struct PaywallView: View {
     /// Initialize paywall with configuration
     /// - Parameters:
     ///   - configuration: Paywall configuration (default uses PremiumManager configuration)
-    ///   - privacyPolicyURL: URL to privacy policy (required for App Store)
-    ///   - termsOfServiceURL: URL to terms of service (required for App Store)
+    ///   - privacyPolicyURL: URL to privacy policy (deprecated - use Configuration.privacyPolicyURL)
+    ///   - termsOfServiceURL: URL to terms of service (deprecated - use Configuration.termsOfServiceURL)
     ///   - analyticsSource: Source/context for analytics tracking (default: "unknown")
     public init(
         configuration: PaywallConfiguration? = nil,
@@ -104,6 +106,7 @@ public struct PaywallView: View {
         
         self.headline = nil
         self.benefits = nil
+        // Store deprecated parameters for backwards compatibility
         self.privacyPolicyURL = privacyPolicyURL
         self.termsOfServiceURL = termsOfServiceURL
         self.analyticsSource = analyticsSource
@@ -113,8 +116,8 @@ public struct PaywallView: View {
     /// - Parameters:
     ///   - headline: Custom headline text (default: "Unlock Premium Features")
     ///   - benefits: Custom benefits list (default: nil - uses built-in benefits)
-    ///   - privacyPolicyURL: URL to privacy policy (required for App Store)
-    ///   - termsOfServiceURL: URL to terms of service (required for App Store)
+    ///   - privacyPolicyURL: URL to privacy policy (deprecated - use Configuration.privacyPolicyURL)
+    ///   - termsOfServiceURL: URL to terms of service (deprecated - use Configuration.termsOfServiceURL)
     public init(
         headline: String? = nil,
         benefits: [BenefitItem]? = nil,
@@ -136,6 +139,7 @@ public struct PaywallView: View {
         
         self.headline = headline
         self.benefits = benefits
+        // Store deprecated parameters for backwards compatibility
         self.privacyPolicyURL = privacyPolicyURL
         self.termsOfServiceURL = termsOfServiceURL
         self.analyticsSource = PaywallView.defaultAnalyticsSource
@@ -407,19 +411,17 @@ public struct PaywallView: View {
     private var legalSection: some View {
         if configuration.showPrivacyLinks {
             HStack(spacing: 12) {
-                if let privacyURL = privacyPolicyURL {
-                    Link(String(localized: "Privacy", comment: "Link to privacy policy"), destination: privacyURL)
-                    
-                    // Show separator only when privacy link is present
-                    Text("•")
-                        .foregroundStyle(.secondary)
-                }
+                // Use deprecated parameter if provided, otherwise use configuration
+                let privacyURL = privacyPolicyURL ?? premiumManager.currentConfiguration.privacyPolicyURL
+                Link(String(localized: "Privacy", comment: "Link to privacy policy"), destination: privacyURL)
                 
-                // Use provided terms URL or Apple's standard EULA
-                // Apple's EULA URL is stable and documented, but handle gracefully
-                if let termsURL = termsOfServiceURL ?? URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/") {
-                    Link(String(localized: "Terms", comment: "Link to terms of service/EULA"), destination: termsURL)
-                }
+                // Show separator
+                Text("•")
+                    .foregroundStyle(.secondary)
+                
+                // Use deprecated parameter if provided, otherwise use configuration
+                let termsURL = termsOfServiceURL ?? premiumManager.currentConfiguration.termsOfServiceURL
+                Link(String(localized: "Terms", comment: "Link to terms of service/EULA"), destination: termsURL)
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
