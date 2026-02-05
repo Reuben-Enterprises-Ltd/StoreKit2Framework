@@ -223,6 +223,18 @@ public struct PaywallView: View {
     
     // MARK: - Benefits Section
     
+    /// Default icons for feature benefits when converting from configuration
+    private static let defaultFeatureIcons = [
+        "chart.line.uptrend.xyaxis",
+        "icloud",
+        "paintbrush",
+        "bolt.fill",
+        "star.fill",
+        "shield.fill",
+        "gift.fill",
+        "heart.fill"
+    ]
+    
     private var benefitsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             let benefitList = benefits ?? benefitItemsFromConfiguration
@@ -243,18 +255,8 @@ public struct PaywallView: View {
         // If configuration has features, convert them to benefit items
         if !configuration.features.isEmpty {
             return configuration.features.enumerated().map { index, feature in
-                let icons = [
-                    "chart.line.uptrend.xyaxis",
-                    "icloud",
-                    "paintbrush",
-                    "bolt.fill",
-                    "star.fill",
-                    "shield.fill",
-                    "gift.fill",
-                    "heart.fill"
-                ]
-                return BenefitItem(
-                    icon: icons[index % icons.count],
+                BenefitItem(
+                    icon: Self.defaultFeatureIcons[index % Self.defaultFeatureIcons.count],
                     title: feature,
                     description: ""
                 )
