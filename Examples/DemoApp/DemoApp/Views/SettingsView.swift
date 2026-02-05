@@ -37,7 +37,7 @@ struct SettingsView: View {
     
     // MARK: - App Info Section
     
-    private var appInfoSection: Some View {
+    private var appInfoSection: some View {
         Section("App Information") {
             HStack {
                 Text("Version")
