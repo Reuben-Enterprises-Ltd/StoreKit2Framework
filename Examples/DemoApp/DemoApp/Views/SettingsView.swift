@@ -59,13 +59,15 @@ struct SettingsView: View {
     
     private var aboutSection: some View {
         Section {
-            Link(destination: URL(string: "https://github.com/Reuben-Enterprises-Ltd/StoreKit2Framework")!) {
-                HStack {
-                    Label("GitHub Repository", systemImage: "link")
-                    Spacer()
-                    Image(systemName: "arrow.up.forward")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            if let githubURL = URL(string: "https://github.com/Reuben-Enterprises-Ltd/StoreKit2Framework") {
+                Link(destination: githubURL) {
+                    HStack {
+                        Label("GitHub Repository", systemImage: "link")
+                        Spacer()
+                        Image(systemName: "arrow.up.forward")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             
