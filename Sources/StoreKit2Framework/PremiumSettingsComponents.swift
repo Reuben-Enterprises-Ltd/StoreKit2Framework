@@ -373,7 +373,6 @@ public struct PremiumBadge: View {
         }
         .navigationTitle("Settings")
     }
-    .environment(\.premiumOverridePreview, true)
 }
 
 #Preview("Free User - Status Row") {
@@ -396,7 +395,6 @@ public struct PremiumBadge: View {
         }
         .navigationTitle("Settings")
     }
-    .environment(\.premiumOverridePreview, true)
 }
 
 #Preview("Premium Badge - With Premium") {
@@ -406,7 +404,6 @@ public struct PremiumBadge: View {
         PremiumBadge()
     }
     .padding()
-    .environment(\.premiumOverridePreview, true)
 }
 
 #Preview("Premium Badge - Without Premium") {
@@ -416,20 +413,6 @@ public struct PremiumBadge: View {
         PremiumBadge()
     }
     .padding()
-}
-
-// MARK: - Preview Environment Key
-
-/// Environment key for overriding premium status in previews
-private struct PremiumOverridePreviewKey: EnvironmentKey {
-    static let defaultValue = false
-}
-
-extension EnvironmentValues {
-    fileprivate var premiumOverridePreview: Bool {
-        get { self[PremiumOverridePreviewKey.self] }
-        set { self[PremiumOverridePreviewKey.self] = newValue }
-    }
 }
 
 #endif

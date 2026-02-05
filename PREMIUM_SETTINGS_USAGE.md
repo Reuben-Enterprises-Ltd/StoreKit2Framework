@@ -443,12 +443,13 @@ All components include preview providers for testing different states:
     PremiumSettingsSection()
 }
 
-// Premium user preview
+// Premium user preview (will show premium state if PremiumManager has premium)
 #Preview("Premium User") {
     PremiumSettingsSection()
-        .environment(\.premiumOverridePreview, true)
 }
 ```
+
+Note: Previews reflect the actual state of `PremiumManager.shared`. To test premium states in previews, you can use the debug override by setting the `PREMIUM_ENABLED=1` environment variable in your scheme.
 
 ### Debug Override
 
@@ -549,14 +550,13 @@ Form {
 
 ### Preview Not Showing Premium State
 
-**Solution:** Use the preview environment modifier:
+**Solution:** Previews use the real `PremiumManager.shared` state. To test premium features in previews:
 
-```swift
-#Preview("Premium") {
-    PremiumSettingsSection()
-        .environment(\.premiumOverridePreview, true)
-}
-```
+1. Edit your scheme
+2. Add environment variable: `PREMIUM_ENABLED=1`
+3. Run the app - premium features will be enabled
+
+Or test on a device/simulator where you've already purchased/restored premium.
 
 ---
 
