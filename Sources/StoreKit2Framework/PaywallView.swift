@@ -54,7 +54,7 @@ public struct PaywallView: View {
     private let premiumManager = PremiumManager.shared
     
     /// Default analytics source when none is provided
-    private static let defaultAnalyticsSource = "unknown"
+    public static let defaultAnalyticsSource = "unknown"
     
     /// Paywall configuration
     public let configuration: PaywallConfiguration
