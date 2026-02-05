@@ -412,6 +412,6 @@ let config = PremiumManager.Configuration(
 ## Related Documentation
 
 - [Configuration Usage Guide](CONFIGURATION_USAGE.md)
-- [Quick Start Guide](QUICK_START.md)
+- [Quick Start Guide](../QUICK_START.md)
 - [Premium Manager Usage](PREMIUM_MANAGER_USAGE.md)
 - [Testing Guide](TESTING_GUIDE.md)

@@ -637,8 +637,8 @@ If products fail to load, check:
 
 - [PREMIUM_MANAGER_USAGE.md](PREMIUM_MANAGER_USAGE.md) - PremiumManager basics
 - [PAYWALL_VIEW_USAGE.md](PAYWALL_VIEW_USAGE.md) - PaywallView customization
-- [QUICK_START.md](QUICK_START.md) - Getting started guide
-- [README.md](README.md) - Framework overview
+- [QUICK_START.md](../QUICK_START.md) - Getting started guide
+- [README.md](../README.md) - Framework overview
 
 ## Support
 

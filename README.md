@@ -92,7 +92,7 @@ PremiumFeature()
     .premiumRequired()
 ```
 
-[→ Complete Integration Guide](QUICK_START.md)
+[→ Complete Integration Guide](docs/INTEGRATION.md) | [→ Quick Start](QUICK_START.md)
 
 ## 🚧 Status: Core Features Implemented
 
@@ -128,16 +128,29 @@ This repository contains a production-ready StoreKit 2 framework with core funct
   - [Full Documentation](Examples/DemoApp/README.md)
 
 ### Documentation
-- **`STOREKIT_COPILOT_AGENT_GUIDE.md`** - Comprehensive guide on StoreKit 2 implementation patterns
-- **`PREMIUM_MANAGER_USAGE.md`** - PremiumManager usage guide and examples
-- **`PAYWALL_VIEW_USAGE.md`** - PaywallView usage guide and examples
-- **`CONFIGURATION_USAGE.md`** - Product configuration system guide
-- **`PREMIUM_SETTINGS_USAGE.md`** - Premium settings components usage guide
-- **`FEATURE_GATING_USAGE.md`** - Feature gating utilities usage guide
-- **`TESTING_GUIDE.md`** - Comprehensive testing documentation
-- **`SCHEME_CONFIGURATION.md`** - Quick Xcode scheme setup for testing
-- **`AGENTS.md`** - Development guidelines for Swift and SwiftUI
-- **`ROADMAP.md`** - Complete implementation roadmap with phases and timelines
+
+#### Main Guides
+- **[INTEGRATION.md](docs/INTEGRATION.md)** - Complete step-by-step integration guide
+- **[API_REFERENCE.md](docs/API_REFERENCE.md)** - Complete API documentation
+- **[BEST_PRACTICES.md](docs/BEST_PRACTICES.md)** - Best practices and recommendations
+- **[TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[MIGRATION.md](docs/MIGRATION.md)** - Migrate from existing StoreKit implementations
+
+#### Component Guides
+- **[PREMIUM_MANAGER_USAGE.md](docs/PREMIUM_MANAGER_USAGE.md)** - PremiumManager usage guide
+- **[PAYWALL_VIEW_USAGE.md](docs/PAYWALL_VIEW_USAGE.md)** - PaywallView usage guide
+- **[CONFIGURATION_USAGE.md](docs/CONFIGURATION_USAGE.md)** - Configuration system guide
+- **[PREMIUM_SETTINGS_USAGE.md](docs/PREMIUM_SETTINGS_USAGE.md)** - Settings components guide
+- **[FEATURE_GATING_USAGE.md](docs/FEATURE_GATING_USAGE.md)** - Feature gating utilities guide
+- **[ADVANCED_FEATURES.md](docs/ADVANCED_FEATURES.md)** - Analytics and advanced features
+
+#### Testing & Development
+- **[TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** - Comprehensive testing documentation
+- **[SCHEME_CONFIGURATION.md](docs/SCHEME_CONFIGURATION.md)** - Xcode scheme setup
+- **[QUICK_START.md](QUICK_START.md)** - Quick start for implementation
+- **[AGENTS.md](AGENTS.md)** - Swift and SwiftUI development guidelines
+- **[STOREKIT_COPILOT_AGENT_GUIDE.md](docs/STOREKIT_COPILOT_AGENT_GUIDE.md)** - Comprehensive StoreKit 2 guide
+- **[ROADMAP.md](docs/ROADMAP.md)** - Implementation roadmap
 
 ### Issues
 The `/issues` directory contains detailed implementation issues:
@@ -469,27 +482,66 @@ swift test --filter "PremiumManager Tests"
 4. **Sandbox Testing**: Real devices with test accounts
 5. **TestFlight**: Final validation before release
 
-## 📖 Documentation Plan
+## 📖 Documentation
 
-- Quick start guide (5-minute integration)
-- Complete integration guide
-- API reference (DocC)
-- Best practices guide
-- Troubleshooting guide
-- App Store Connect setup guide
-- Example app with full implementation
+### Quick Links
+
+- 📘 **[Integration Guide](docs/INTEGRATION.md)** - Complete step-by-step setup
+- 📗 **[API Reference](docs/API_REFERENCE.md)** - All public APIs documented
+- 📕 **[Best Practices](docs/BEST_PRACTICES.md)** - Tips for great subscription experiences
+- 📙 **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Fix common issues
+- 📓 **[Migration Guide](docs/MIGRATION.md)** - Migrate from existing StoreKit code
+
+### Getting Started
+
+1. **New to the framework?** Start with [docs/INTEGRATION.md](docs/INTEGRATION.md)
+2. **Have questions?** Check [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
+3. **Need API details?** See [docs/API_REFERENCE.md](docs/API_REFERENCE.md)
+4. **Want to optimize?** Read [docs/BEST_PRACTICES.md](docs/BEST_PRACTICES.md)
+5. **Migrating existing code?** Follow [docs/MIGRATION.md](docs/MIGRATION.md)
 
 ## 🤝 Contributing
 
-This project follows strict Swift and SwiftUI guidelines:
-- iOS 18.0+
-- Swift 6.2+
-- Modern concurrency (async/await)
-- @Observable pattern
-- No UIKit (unless necessary)
-- No third-party dependencies
+We welcome contributions! This project follows strict Swift and SwiftUI guidelines to ensure high quality and maintainability.
 
-See [AGENTS.md](AGENTS.md) for complete guidelines.
+### Development Guidelines
+
+- **iOS 18.0+** - Modern iOS features
+- **Swift 6.2+** - Latest Swift with strict concurrency
+- **Modern Concurrency** - async/await, actors, structured concurrency
+- **@Observable** - Modern observation pattern (not ObservableObject)
+- **SwiftUI First** - No UIKit unless absolutely necessary
+- **Zero Dependencies** - Only Apple frameworks
+- **Type Safety** - Strict Swift concurrency compliance
+- **Documentation** - DocC-style comments for all public APIs
+- **Testing** - Comprehensive test coverage required
+
+### Before Contributing
+
+1. Read [AGENTS.md](AGENTS.md) for complete Swift/SwiftUI guidelines
+2. Review existing code style and patterns
+3. Write tests for new features
+4. Update documentation
+5. Follow existing architecture patterns
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes following the guidelines
+4. Write/update tests
+5. Update documentation
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+### Reporting Issues
+
+- Use the [GitHub issue tracker](https://github.com/Reuben-Enterprises-Ltd/StoreKit2Framework/issues)
+- Include framework version, Xcode version, iOS version
+- Provide minimal reproduction code
+- Describe expected vs actual behavior
+- Include console output if relevant
 
 ## 📄 License
 

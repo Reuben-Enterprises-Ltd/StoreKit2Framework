@@ -564,7 +564,7 @@ Or test on a device/simulator where you've already purchased/restored premium.
 
 - [PremiumManager Usage Guide](PREMIUM_MANAGER_USAGE.md) - Core premium management
 - [PaywallView Usage Guide](PAYWALL_VIEW_USAGE.md) - Paywall component
-- [Quick Start Guide](QUICK_START.md) - Getting started
+- [Quick Start Guide](../QUICK_START.md) - Getting started
 - [STOREKIT_COPILOT_AGENT_GUIDE.md](STOREKIT_COPILOT_AGENT_GUIDE.md) - Complete reference
 
 ---
@@ -572,7 +572,7 @@ Or test on a device/simulator where you've already purchased/restored premium.
 ## Support
 
 For issues or questions:
-- Check the [README](README.md)
+- Check the [README](../README.md)
 - Review the [STOREKIT_COPILOT_AGENT_GUIDE.md](STOREKIT_COPILOT_AGENT_GUIDE.md)
 - Open an issue on GitHub
 
