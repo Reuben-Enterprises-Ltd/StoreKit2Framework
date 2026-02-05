@@ -195,7 +195,7 @@ public struct PaywallView: View {
         VStack(spacing: 16) {
             Image(systemName: "sparkles")
                 .font(.system(size: 50))
-                .foregroundStyle(configuration.tintColor?.gradient ?? .blue.gradient)
+                .foregroundStyle((configuration.tintColor ?? .blue).gradient)
             
             Text(headline ?? configuration.headline)
                 .font(.system(size: 28, weight: .bold, design: .rounded))

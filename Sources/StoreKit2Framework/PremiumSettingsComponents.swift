@@ -182,12 +182,13 @@ public struct PremiumSettingsSection: View {
         guard case .verified(let transaction) = activeEntitlement.transaction else { return nil }
         
         let productId = transaction.productID
+        let config = premiumManager.currentConfiguration
         
-        if productId == PremiumManager.ProductIdentifiers.monthly {
+        if productId == config.productIdentifiers.monthly {
             return "Monthly"
-        } else if productId == PremiumManager.ProductIdentifiers.yearly {
+        } else if productId == config.productIdentifiers.yearly {
             return "Yearly"
-        } else if productId == PremiumManager.ProductIdentifiers.lifetime {
+        } else if let lifetimeId = config.productIdentifiers.lifetime, productId == lifetimeId {
             #if DEBUG
             return "Lifetime (10min test)"
             #else
@@ -203,7 +204,8 @@ public struct PremiumSettingsSection: View {
         
         // For lifetime non-renewing subscription, show expiration in debug mode
         guard case .verified(let transaction) = activeEntitlement.transaction else { return nil }
-        if transaction.productID == PremiumManager.ProductIdentifiers.lifetime {
+        let config = premiumManager.currentConfiguration
+        if let lifetimeId = config.productIdentifiers.lifetime, transaction.productID == lifetimeId {
             #if DEBUG
             // Show expiration time in debug mode (10 minutes from purchase)
             let debugExpirationInterval: TimeInterval = 10 * 60 // 10 minutes
@@ -323,12 +325,13 @@ public struct PremiumStatusRow: View {
         guard case .verified(let transaction) = activeEntitlement.transaction else { return nil }
         
         let productId = transaction.productID
+        let config = premiumManager.currentConfiguration
         
-        if productId == PremiumManager.ProductIdentifiers.monthly {
+        if productId == config.productIdentifiers.monthly {
             return "Monthly Subscription"
-        } else if productId == PremiumManager.ProductIdentifiers.yearly {
+        } else if productId == config.productIdentifiers.yearly {
             return "Yearly Subscription"
-        } else if productId == PremiumManager.ProductIdentifiers.lifetime {
+        } else if let lifetimeId = config.productIdentifiers.lifetime, productId == lifetimeId {
             #if DEBUG
             return "Lifetime (10min test)"
             #else
