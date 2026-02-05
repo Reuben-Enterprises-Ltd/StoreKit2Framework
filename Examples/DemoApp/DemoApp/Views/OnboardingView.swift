@@ -11,6 +11,8 @@ import StoreKit2Framework
 struct OnboardingView: View {
     @Environment(\.dismiss) private var dismiss
     
+    private let premiumManager = PremiumManager.shared
+    
     @State private var currentPage = 0
     @State private var showPaywall = false
     
