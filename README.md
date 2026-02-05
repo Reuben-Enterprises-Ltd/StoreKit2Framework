@@ -58,12 +58,26 @@ Select a simulator and press ⌘R. The example app demonstrates all integration 
 ### Basic Integration
 
 ```swift
-// 1. Initialize in your app
+// 1. Configure and initialize in your app
 import StoreKit2Framework
 
 @main
 struct YourApp: App {
     init() {
+        // Configure with your product IDs
+        let config = PremiumManager.Configuration(
+            productIdentifiers: .init(
+                monthly: "com.yourapp.premium.monthly",
+                yearly: "com.yourapp.premium.yearly",
+                lifetime: "com.yourapp.premium.lifetime"
+            ),
+            features: [
+                .init(title: "Unlimited access", systemImageName: "infinity"),
+                .init(title: "Priority support", systemImageName: "person.fill.questionmark"),
+                .init(title: "Cloud sync", systemImageName: "icloud")
+            ]
+        )
+        PremiumManager.shared.configure(config)
         PremiumManager.shared.ensureInitialized()
     }
 }
@@ -92,10 +106,11 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - Restore purchases functionality
 - Real-time transaction monitoring
 - Premium status caching
+- Product configuration system (flexible product IDs and features)
 - PaywallView UI component
 - Premium settings components (PremiumSettingsSection, PremiumStatusRow, PremiumBadge)
 - Feature gating utilities (.premiumOnly(), .premiumGated(), .premiumRequired())
-- Comprehensive testing infrastructure (43 tests, >80% coverage)
+- Comprehensive testing infrastructure (69 tests, >80% coverage)
 - StoreKit configuration file for local testing
 - Mock objects and test helpers
 - Debug tools and documentation
@@ -116,6 +131,7 @@ This repository contains a production-ready StoreKit 2 framework with core funct
 - **`STOREKIT_COPILOT_AGENT_GUIDE.md`** - Comprehensive guide on StoreKit 2 implementation patterns
 - **`PREMIUM_MANAGER_USAGE.md`** - PremiumManager usage guide and examples
 - **`PAYWALL_VIEW_USAGE.md`** - PaywallView usage guide and examples
+- **`CONFIGURATION_USAGE.md`** - Product configuration system guide
 - **`PREMIUM_SETTINGS_USAGE.md`** - Premium settings components usage guide
 - **`FEATURE_GATING_USAGE.md`** - Feature gating utilities usage guide
 - **`TESTING_GUIDE.md`** - Comprehensive testing documentation

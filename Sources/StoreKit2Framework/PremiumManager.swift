@@ -5,16 +5,158 @@ import StoreKit
 @MainActor
 @Observable
 public final class PremiumManager {
-    // MARK: - Product Identifiers
+    // MARK: - Configuration Types
     
-    /// Define your product IDs here
-    public enum ProductIdentifiers {
-        public static let monthly = "com.yourcompany.yourapp.monthly"
-        public static let yearly = "com.yourcompany.yourapp.yearly"
-        public static let lifetime = "com.yourcompany.yourapp.lifetime"
+    /// Product identifiers for In-App Purchases
+    public struct ProductIdentifiers {
+        /// Monthly subscription product ID
+        public var monthly: String
         
-        public static var all: [String] {
-            [monthly, yearly, lifetime]
+        /// Yearly subscription product ID
+        public var yearly: String
+        
+        /// Optional lifetime (non-renewing) subscription product ID
+        public var lifetime: String?
+        
+        /// All product IDs (excludes nil lifetime)
+        public var all: [String] {
+            [monthly, yearly, lifetime].compactMap { $0 }
+        }
+        
+        /// Default product identifiers
+        public static var `default`: ProductIdentifiers {
+            ProductIdentifiers(
+                monthly: "com.yourcompany.yourapp.monthly",
+                yearly: "com.yourcompany.yourapp.yearly",
+                lifetime: "com.yourcompany.yourapp.lifetime"
+            )
+        }
+        
+        /// Initialize with custom product IDs
+        public init(monthly: String, yearly: String, lifetime: String? = nil) {
+            self.monthly = monthly
+            self.yearly = yearly
+            self.lifetime = lifetime
+        }
+    }
+    
+    /// A displayable benefit/feature shown in the paywall
+    public struct Feature {
+        /// The user-facing title of the feature (e.g., "Cloud Sync")
+        public let title: String
+        /// The SF Symbol name used to represent the feature visually
+        public let systemImageName: String
+        
+        /// Public initializer so apps can provide custom features in configuration
+        public init(title: String, systemImageName: String) {
+            self.title = title
+            self.systemImageName = systemImageName
+        }
+    }
+    
+    /// Configuration for the PremiumManager
+    public struct Configuration {
+        /// Product identifiers to use
+        public var productIdentifiers: ProductIdentifiers
+        
+        /// List of features/benefits for display in paywall
+        public var features: [PremiumManager.Feature]
+        
+        /// Enable debug mode (verbose logging, etc.)
+        public var enableDebugMode: Bool
+        
+        /// Key for caching premium status in UserDefaults
+        public var cacheKey: String
+        
+        /// Default configuration
+        public static var `default`: Configuration {
+            Configuration(
+                productIdentifiers: .default,
+                features: [
+                    .init(title: "Advanced Analytics", systemImageName: ""),
+                    .init(title: "Cloud Sync", systemImageName: ""),
+                    .init(title: "Premium Themes", systemImageName: ""),
+                    .init(title: "Priority Support", systemImageName: ""),
+                ],
+                enableDebugMode: false,
+                cacheKey: "premium_status"
+            )
+        }
+        
+        /// Debug configuration preset
+        public static var debug: Configuration {
+            var config = Configuration.default
+            config.enableDebugMode = true
+            return config
+        }
+        
+        /// Production configuration preset
+        public static var production: Configuration {
+            var config = Configuration.default
+            config.enableDebugMode = false
+            return config
+        }
+        
+        /// Initialize with custom configuration
+        public init(
+            productIdentifiers: ProductIdentifiers = .default,
+            features: [PremiumManager.Feature] = [],
+            enableDebugMode: Bool = false,
+            cacheKey: String = "premium_status"
+        ) {
+            self.productIdentifiers = productIdentifiers
+            self.features = features
+            self.enableDebugMode = enableDebugMode
+            self.cacheKey = cacheKey
+        }
+        
+        /// Validate the configuration
+        public func validate() throws {
+            // Check monthly product ID
+            guard !productIdentifiers.monthly.isEmpty else {
+                throw ConfigurationError.emptyProductID(field: "monthly")
+            }
+            
+            guard productIdentifiers.monthly.contains(".") else {
+                throw ConfigurationError.invalidProductIDFormat(id: productIdentifiers.monthly)
+            }
+            
+            // Check yearly product ID
+            guard !productIdentifiers.yearly.isEmpty else {
+                throw ConfigurationError.emptyProductID(field: "yearly")
+            }
+            
+            guard productIdentifiers.yearly.contains(".") else {
+                throw ConfigurationError.invalidProductIDFormat(id: productIdentifiers.yearly)
+            }
+            
+            // Check lifetime product ID if provided
+            if let lifetime = productIdentifiers.lifetime {
+                guard !lifetime.isEmpty else {
+                    throw ConfigurationError.emptyProductID(field: "lifetime")
+                }
+                
+                guard lifetime.contains(".") else {
+                    throw ConfigurationError.invalidProductIDFormat(id: lifetime)
+                }
+            }
+            
+            // Check for duplicate product IDs
+            let ids = productIdentifiers.all
+            let uniqueIds = Set(ids)
+            guard ids.count == uniqueIds.count else {
+                throw ConfigurationError.duplicateProductIDs
+            }
+            
+            // Warn if features list is empty (not an error, but worth noting)
+            if features.isEmpty && enableDebugMode {
+                print("⚠️ Configuration Warning: Features list is empty")
+            }
+            
+            // Validate cache key
+            guard !cacheKey.isEmpty else {
+                throw ConfigurationError.emptyCacheKey
+            }
         }
     }
     
@@ -44,8 +186,16 @@ public final class PremiumManager {
     /// Transaction update task
     private nonisolated(unsafe) var updateListenerTask: Task<Void, Never>?
     
+    /// Current configuration (immutable after initialization)
+    private var configuration: Configuration = .default
+    
+    /// Whether configuration has been set
+    private var isConfigured = false
+    
     /// Key for caching premium status
-    private let cachedPremiumStatusKey = "cachedPremiumStatus"
+    private var cachedPremiumStatusKey: String {
+        configuration.cacheKey
+    }
     
     /// Whether initialization has started
     private var hasStartedInitialization = false
@@ -100,6 +250,41 @@ public final class PremiumManager {
         startInitialization()
     }
     
+    /// Configure the PremiumManager with custom settings
+    /// - Parameter config: The configuration to use
+    /// - Important: Must be called before `ensureInitialized()` to take effect
+    public func configure(_ config: Configuration) {
+        guard !hasStartedInitialization else {
+            if configuration.enableDebugMode {
+                print("⚠️ PremiumManager Warning: configure() called after initialization. Configuration changes will not take effect.")
+            }
+            return
+        }
+        
+        // Validate configuration
+        do {
+            try config.validate()
+            configuration = config
+            isConfigured = true
+            
+            if configuration.enableDebugMode {
+                print("✅ PremiumManager configured with:")
+                print("  - Products: \(configuration.productIdentifiers.all)")
+                print("  - Features: \(configuration.features.count) features")
+                print("  - Debug mode: \(configuration.enableDebugMode)")
+            }
+        } catch {
+            // Log validation error but continue with current config
+            print("❌ PremiumManager Configuration Error: \(error)")
+            print("   Continuing with previous configuration")
+        }
+    }
+    
+    /// Access to current configuration (read-only)
+    public var currentConfiguration: Configuration {
+        configuration
+    }
+    
     deinit {
         updateListenerTask?.cancel()
     }
@@ -112,9 +297,14 @@ public final class PremiumManager {
         error = nil
         
         do {
-            let loadedProducts = try await Product.products(for: ProductIdentifiers.all)
+            let productIds = configuration.productIdentifiers.all
+            let loadedProducts = try await Product.products(for: productIds)
             products = loadedProducts.sorted { $0.price < $1.price }
             isLoading = false
+            
+            if configuration.enableDebugMode {
+                print("✅ Loaded \(products.count) products: \(products.map { $0.id })")
+            }
         } catch {
             self.error = error
             isLoading = false
@@ -182,7 +372,8 @@ public final class PremiumManager {
                 let transaction = try checkVerified(result)
                 
                 // Check for lifetime non-renewing subscription
-                if transaction.productID == ProductIdentifiers.lifetime {
+                if let lifetimeId = configuration.productIdentifiers.lifetime,
+                   transaction.productID == lifetimeId {
                     #if DEBUG
                     // In debug mode, lifetime expires after 10 minutes for testing
                     let debugExpirationInterval: TimeInterval = 10 * 60 // 10 minutes
@@ -269,4 +460,27 @@ public enum StoreError: Error, LocalizedError {
         }
     }
 }
+
+// MARK: - Configuration Errors
+
+public enum ConfigurationError: Error, LocalizedError {
+    case emptyProductID(field: String)
+    case invalidProductIDFormat(id: String)
+    case duplicateProductIDs
+    case emptyCacheKey
+    
+    public var errorDescription: String? {
+        switch self {
+        case .emptyProductID(let field):
+            return "Product ID for '\(field)' cannot be empty"
+        case .invalidProductIDFormat(let id):
+            return "Product ID '\(id)' does not follow Apple's format (should contain '.')"
+        case .duplicateProductIDs:
+            return "Product IDs must be unique"
+        case .emptyCacheKey:
+            return "Cache key cannot be empty"
+        }
+    }
+}
 #endif
+

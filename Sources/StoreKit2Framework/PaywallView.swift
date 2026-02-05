@@ -2,15 +2,64 @@
 import SwiftUI
 import StoreKit
 
+// MARK: - Paywall Configuration
+
+/// Configuration for PaywallView appearance and behavior
+public struct PaywallConfiguration {
+    /// Custom headline text
+    public var headline: String
+    
+    /// Custom features/benefits list
+    public var features: [PremiumManager.Feature]
+    
+    /// Whether to show the restore purchases button
+    public var showRestoreButton: Bool
+    
+    /// Whether to show privacy policy and terms links
+    public var showPrivacyLinks: Bool
+    
+    /// Optional custom tint color for the paywall
+    public var tintColor: Color?
+    
+    /// Default configuration
+    public static var `default`: PaywallConfiguration {
+        PaywallConfiguration(
+            headline: "Unlock Premium Features",
+            features: [],
+            showRestoreButton: true,
+            showPrivacyLinks: true,
+            tintColor: nil
+        )
+    }
+    
+    /// Initialize with custom configuration
+    public init(
+        headline: String = "Unlock Premium Features",
+        features: [PremiumManager.Feature] = [],
+        showRestoreButton: Bool = true,
+        showPrivacyLinks: Bool = true,
+        tintColor: Color? = nil
+    ) {
+        self.headline = headline
+        self.features = features
+        self.showRestoreButton = showRestoreButton
+        self.showPrivacyLinks = showPrivacyLinks
+        self.tintColor = tintColor
+    }
+}
+
 /// A beautiful, reusable PaywallView that displays available products and handles purchases
 public struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     private let premiumManager = PremiumManager.shared
     
-    /// Optional headline to customize the paywall context
+    /// Paywall configuration
+    public let configuration: PaywallConfiguration
+    
+    /// Optional headline to customize the paywall context (deprecated - use configuration)
     public let headline: String?
     
-    /// Optional benefits list (can be provided by consuming app)
+    /// Optional benefits list (deprecated - use configuration)
     public let benefits: [BenefitItem]?
     
     /// Privacy policy URL (required for App Store submission)
@@ -25,7 +74,33 @@ public struct PaywallView: View {
     @State private var isPurchasing = false
     @State private var isRestoring = false
     
-    /// Initialize paywall with optional customization
+    /// Initialize paywall with configuration
+    /// - Parameters:
+    ///   - configuration: Paywall configuration (default uses PremiumManager configuration)
+    ///   - privacyPolicyURL: URL to privacy policy (required for App Store)
+    ///   - termsOfServiceURL: URL to terms of service (required for App Store)
+    public init(
+        configuration: PaywallConfiguration? = nil,
+        privacyPolicyURL: URL? = nil,
+        termsOfServiceURL: URL? = nil
+    ) {
+        // Use provided configuration or create one from PremiumManager
+        let managerConfig = PremiumManager.shared.currentConfiguration
+        self.configuration = configuration ?? PaywallConfiguration(
+            headline: "Unlock Premium Features",
+            features: managerConfig.features,
+            showRestoreButton: true,
+            showPrivacyLinks: true,
+            tintColor: nil
+        )
+        
+        self.headline = nil
+        self.benefits = nil
+        self.privacyPolicyURL = privacyPolicyURL
+        self.termsOfServiceURL = termsOfServiceURL
+    }
+    
+    /// Initialize paywall with optional customization (legacy API)
     /// - Parameters:
     ///   - headline: Custom headline text (default: "Unlock Premium Features")
     ///   - benefits: Custom benefits list (default: nil - uses built-in benefits)
@@ -37,6 +112,19 @@ public struct PaywallView: View {
         privacyPolicyURL: URL? = nil,
         termsOfServiceURL: URL? = nil
     ) {
+        // Legacy initialization - convert to configuration
+        let managerConfig = PremiumManager.shared.currentConfiguration
+        
+        self.configuration = PaywallConfiguration(
+            headline: headline ?? "Unlock Premium Features",
+            features: benefits?.map { benefit in
+                    .init(title: benefit.title, systemImageName: benefit.icon)
+            } ?? managerConfig.features,
+            showRestoreButton: true,
+            showPrivacyLinks: true,
+            tintColor: nil
+        )
+        
         self.headline = headline
         self.benefits = benefits
         self.privacyPolicyURL = privacyPolicyURL
@@ -109,9 +197,9 @@ public struct PaywallView: View {
         VStack(spacing: 16) {
             Image(systemName: "sparkles")
                 .font(.system(size: 50))
-                .foregroundStyle(.blue.gradient)
+                .foregroundStyle((configuration.tintColor ?? .blue).gradient)
             
-            Text(headline ?? "Unlock Premium Features")
+            Text(headline ?? configuration.headline)
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .multilineTextAlignment(.center)
             
@@ -137,9 +225,21 @@ public struct PaywallView: View {
     
     // MARK: - Benefits Section
     
+    /// Default icons for feature benefits when converting from configuration
+    private static let defaultFeatureIcons = [
+        "chart.line.uptrend.xyaxis",
+        "icloud",
+        "paintbrush",
+        "bolt.fill",
+        "star.fill",
+        "shield.fill",
+        "gift.fill",
+        "heart.fill"
+    ]
+    
     private var benefitsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            let benefitList = benefits ?? defaultBenefits
+            let benefitList = benefits ?? benefitItemsFromConfiguration
             ForEach(benefitList) { benefit in
                 BenefitRow(
                     icon: benefit.icon,
@@ -151,6 +251,22 @@ public struct PaywallView: View {
         .padding()
         .background(.ultraThinMaterial)
         .clipShape(.rect(cornerRadius: 16))
+    }
+    
+    private var benefitItemsFromConfiguration: [BenefitItem] {
+        // If configuration has features, convert them to benefit items
+        if !configuration.features.isEmpty {
+            return configuration.features.enumerated().map { index, feature in
+                BenefitItem(
+                    icon: feature.systemImageName,
+                    title: feature.title,
+                    description: ""
+                )
+            }
+        }
+        
+        // Fall back to default benefits
+        return defaultBenefits
     }
     
     private var defaultBenefits: [BenefitItem] {
@@ -196,7 +312,7 @@ public struct PaywallView: View {
     
     private func isRecommendedProduct(_ product: Product) -> Bool {
         // Recommend yearly subscription as best value
-        product.id == PremiumManager.ProductIdentifiers.yearly
+        product.id == premiumManager.currentConfiguration.productIdentifiers.yearly
     }
     
     // MARK: - Purchase Button
@@ -219,7 +335,7 @@ public struct PaywallView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.blue.gradient)
+            .background((configuration.tintColor ?? .blue).gradient)
             .foregroundStyle(.white)
             .clipShape(.rect(cornerRadius: 16))
         }
@@ -242,24 +358,27 @@ public struct PaywallView: View {
     
     // MARK: - Restore Button
     
+    @ViewBuilder
     private var restoreButton: some View {
-        Button {
-            Task {
-                await restorePurchases()
-            }
-        } label: {
-            HStack {
-                if isRestoring {
-                    ProgressView()
-                        .controlSize(.small)
-                } else {
-                    Text("Restore Purchases")
+        if configuration.showRestoreButton {
+            Button {
+                Task {
+                    await restorePurchases()
                 }
+            } label: {
+                HStack {
+                    if isRestoring {
+                        ProgressView()
+                            .controlSize(.small)
+                    } else {
+                        Text("Restore Purchases")
+                    }
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .disabled(isRestoring)
         }
-        .disabled(isRestoring)
     }
     
     private func restorePurchases() async {
@@ -275,7 +394,7 @@ public struct PaywallView: View {
     
     @ViewBuilder
     private var legalSection: some View {
-        if privacyPolicyURL != nil || termsOfServiceURL != nil {
+        if configuration.showPrivacyLinks && (privacyPolicyURL != nil || termsOfServiceURL != nil) {
             HStack(spacing: 12) {
                 if let privacyURL = privacyPolicyURL {
                     Link("Privacy Policy", destination: privacyURL)
@@ -326,8 +445,9 @@ public struct PaywallView: View {
     
     private func selectDefaultProduct() {
         // Default to yearly (best value) or first product
+        let yearlyId = premiumManager.currentConfiguration.productIdentifiers.yearly
         selectedProduct = premiumManager.products.first {
-            $0.id == PremiumManager.ProductIdentifiers.yearly
+            $0.id == yearlyId
         } ?? premiumManager.products.first
     }
 }
