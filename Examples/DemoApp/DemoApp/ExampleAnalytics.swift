@@ -37,16 +37,16 @@ class ExampleAnalytics: PremiumAnalytics {
         let event = "purchase_completed"
         let parameters: [String: Any] = [
             "product_id": product.id,
-            "price": product.price as Any,
-            "display_price": product.displayPrice,
+            "price_string": product.displayPrice,
             "type": product.type.debugDescription
         ]
         logEvent(event, parameters: parameters)
         
         // In a real app:
         // Analytics.logEvent(event, parameters: parameters)
-        // Also consider tracking revenue events
-        // Analytics.logRevenue(amount: product.price, currency: product.priceCurrencyCode)
+        // Also consider tracking revenue events with numeric price
+        // let priceDouble = NSDecimalNumber(decimal: product.price).doubleValue
+        // Analytics.logRevenue(amount: priceDouble, currency: product.priceFormatStyle.currencyCode)
     }
     
     func trackPurchaseFailed(product: Product?, error: Error) {

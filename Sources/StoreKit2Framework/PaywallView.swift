@@ -53,6 +53,9 @@ public struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     private let premiumManager = PremiumManager.shared
     
+    /// Default analytics source when none is provided
+    private static let defaultAnalyticsSource = "unknown"
+    
     /// Paywall configuration
     public let configuration: PaywallConfiguration
     
@@ -87,7 +90,7 @@ public struct PaywallView: View {
         configuration: PaywallConfiguration? = nil,
         privacyPolicyURL: URL? = nil,
         termsOfServiceURL: URL? = nil,
-        analyticsSource: String = "unknown"
+        analyticsSource: String = PaywallView.defaultAnalyticsSource
     ) {
         // Use provided configuration or create one from PremiumManager
         let managerConfig = PremiumManager.shared.currentConfiguration
@@ -135,7 +138,7 @@ public struct PaywallView: View {
         self.benefits = benefits
         self.privacyPolicyURL = privacyPolicyURL
         self.termsOfServiceURL = termsOfServiceURL
-        self.analyticsSource = "unknown"
+        self.analyticsSource = PaywallView.defaultAnalyticsSource
     }
     
     public var body: some View {

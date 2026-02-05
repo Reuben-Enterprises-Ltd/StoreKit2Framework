@@ -45,12 +45,13 @@ class MyAnalytics: PremiumAnalytics {
         // Track successful purchase
         Analytics.logEvent("purchase_completed", parameters: [
             "product_id": product.id,
-            "price": product.displayPrice
+            "price_string": product.displayPrice
         ])
         
-        // Also track revenue
+        // Also track revenue with numeric price
+        let priceDouble = NSDecimalNumber(decimal: product.price).doubleValue
         Analytics.logRevenue(
-            amount: product.price,
+            amount: priceDouble,
             currency: product.priceFormatStyle.currencyCode
         )
     }

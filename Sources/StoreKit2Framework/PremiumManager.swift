@@ -294,7 +294,7 @@ public final class PremiumManager {
                 print("  - Features: \(configuration.features.count) features")
                 print("  - Debug mode: \(configuration.enableDebugMode)")
                 print("  - Analytics: \(configuration.analytics != nil ? "Enabled" : "Disabled")")
-                print("  - Offline grace period: \(Int(configuration.offlineGracePeriod / 3600)) hours")
+                print("  - Offline grace period: \(configuration.offlineGracePeriod) seconds (\(String(format: "%.1f", configuration.offlineGracePeriod / 3600)) hours)")
                 print("  - Promotional offers: \(configuration.enablePromotionalOffers ? "Enabled" : "Disabled")")
             }
         } catch {
