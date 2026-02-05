@@ -206,15 +206,15 @@ public struct PremiumSettingsSection: View {
         // For subscriptions, show renewal info
         guard case .verified(let renewalInfo) = activeEntitlement.renewalInfo else { return nil }
         
-        if let expirationDate = renewalInfo.expirationDate {
+        if let renewalDate = renewalInfo.renewalDate {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
             
             if renewalInfo.willAutoRenew {
-                return "Renews: \(formatter.string(from: expirationDate))"
+                return "Renews: \(formatter.string(from: renewalDate))"
             } else {
-                return "Expires: \(formatter.string(from: expirationDate))"
+                return "Expires: \(formatter.string(from: renewalDate))"
             }
         }
         

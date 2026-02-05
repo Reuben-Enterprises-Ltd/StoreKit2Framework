@@ -18,11 +18,16 @@
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
+/* Begin PBXBuildFile section */
+		2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework in Frameworks */ = {isa = PBXBuildFile; productRef = 2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		2A000007000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = DemoApp;
 			packageProductDependencies = (
+				2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */,
 			);
 			productName = DemoApp;
 			productReference = 2A000003000000000000001 /* DemoApp.app */;
@@ -336,6 +342,14 @@
 			relativePath = ../../../StoreKit2Framework;
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2D8C1F8C2F34D25600B5FBAE /* StoreKit2Framework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2D8C1F8B2F34D25500B5FBAD /* XCLocalSwiftPackageReference "../../../StoreKit2Framework" */;
+			productName = StoreKit2Framework;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2A000013000000000000001 /* Project object */;
 }

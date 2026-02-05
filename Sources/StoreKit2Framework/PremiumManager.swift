@@ -216,7 +216,7 @@ public final class PremiumManager {
     
     /// Listen for transaction updates in the background
     private func listenForTransactions() -> Task<Void, Never> {
-        Task.detached { @MainActor [weak self] in
+        Task { @MainActor [weak self] in
             for await result in Transaction.updates {
                 guard let self else { return }
                 
