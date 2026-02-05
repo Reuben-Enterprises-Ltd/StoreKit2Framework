@@ -25,21 +25,21 @@ public final class PremiumManager {
     // MARK: - Public State (Observable)
     
     /// Whether the user has premium access (reactive)
-    private(set) var isPremium = false
+    public private(set) var isPremium = false
     
     /// Available products from the App Store
-    private(set) var products: [Product] = []
+    public private(set) var products: [Product] = []
     
     /// Loading state
-    private(set) var isLoading = false
+    public private(set) var isLoading = false
     
     /// Error state
-    private(set) var error: Error?
+    public private(set) var error: Error?
     
     // MARK: - Private State
     
     /// Active subscription or lifetime purchase
-    private(set) var activeEntitlement: Product.SubscriptionInfo.Status?
+    public private(set) var activeEntitlement: Product.SubscriptionInfo.Status?
     
     /// Transaction update task
     private nonisolated(unsafe) var updateListenerTask: Task<Void, Never>?
@@ -193,13 +193,12 @@ public final class PremiumManager {
                     let status = try await subscription.status.first
                     
                     if case .verified(let renewalInfo) = status?.renewalInfo,
-                       case .verified = status?.transaction {
-                        // Check if subscription is active
-                        if renewalInfo.willAutoRenew {
-                            hasActiveEntitlement = true
-                            activeEntitlement = status
-                            break
-                        }
+                       case .verified(let subscriptionStatus) = status?.transaction,
+                       case .subscribed = status?.state {
+                        // Check if subscription is active (including non-renewing but still valid)
+                        hasActiveEntitlement = true
+                        activeEntitlement = status
+                        break
                     }
                 }
             } catch {
@@ -217,7 +216,7 @@ public final class PremiumManager {
     
     /// Listen for transaction updates in the background
     private func listenForTransactions() -> Task<Void, Never> {
-        Task.detached { [weak self] in
+        Task.detached { @MainActor [weak self] in
             for await result in Transaction.updates {
                 guard let self else { return }
                 

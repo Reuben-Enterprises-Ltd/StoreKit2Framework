@@ -96,7 +96,7 @@ struct PremiumManagerTests {
 /// 4. Premium Status:
 ///    - updatePremiumStatus() should check Transaction.currentEntitlements
 ///    - Should detect lifetime purchases
-///    - Should detect active subscriptions
+///    - Should detect active subscriptions (including non-renewing but valid)
 ///    - Should cache status in UserDefaults
 ///    - Should respect debug override when PREMIUM_ENABLED=1
 ///
@@ -104,6 +104,7 @@ struct PremiumManagerTests {
 ///    - Background listener should catch external changes
 ///    - Should verify transactions before processing
 ///    - Should finish transactions after processing
+///    - Should properly isolate to MainActor
 ///
 /// 6. Caching:
 ///    - Premium status should be cached in UserDefaults
@@ -114,3 +115,4 @@ struct PremiumManagerTests {
 ///    - All public methods should run on @MainActor
 ///    - Should follow Swift 6.2 strict concurrency
 ///    - nonisolated(unsafe) used appropriately for Task storage
+///    - Transaction listener uses proper actor isolation
