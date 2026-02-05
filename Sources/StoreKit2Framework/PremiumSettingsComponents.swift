@@ -52,7 +52,7 @@ public struct PremiumSettingsSection: View {
             .padding(.vertical, 4)
         }
         .sheet(isPresented: $showingPaywall) {
-            PaywallView()
+            PaywallView(analyticsSource: "settings")
         }
         .onAppear {
             premiumManager.ensureInitialized()
@@ -312,7 +312,7 @@ public struct PremiumStatusRow: View {
             }
         }
         .sheet(isPresented: $showingPaywall) {
-            PaywallView()
+            PaywallView(analyticsSource: "settings")
         }
         .onAppear {
             premiumManager.ensureInitialized()
