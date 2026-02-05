@@ -192,10 +192,10 @@ public final class PremiumManager {
                    let subscription = product.subscription {
                     let status = try await subscription.status.first
                     
-                    if case .verified(let renewalInfo) = status?.renewalInfo,
-                       case .verified(let subscriptionStatus) = status?.transaction,
+                    // Check if subscription is active (including non-renewing but still valid)
+                    if case .verified = status?.renewalInfo,
+                       case .verified = status?.transaction,
                        case .subscribed = status?.state {
-                        // Check if subscription is active (including non-renewing but still valid)
                         hasActiveEntitlement = true
                         activeEntitlement = status
                         break
