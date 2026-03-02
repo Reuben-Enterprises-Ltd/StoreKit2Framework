@@ -2,6 +2,8 @@
 
 This demo app demonstrates how to integrate and use the StoreKit2Framework in your iOS app. It showcases all major integration patterns, UI components, and best practices.
 
+> **New**: The framework now includes [improved transaction handling](TRANSACTION_HANDLING.md) that follows Apple's official patterns. Your app automatically benefits from these reliability improvements!
+
 ## 🎯 What's Demonstrated
 
 ### 1. Framework Initialization
@@ -437,6 +439,7 @@ Before shipping, test all these scenarios:
 - [ ] Lifetime purchase flow
 - [ ] Purchase cancellation
 - [ ] Purchase error handling
+- [ ] **Interrupted purchase (force quit during purchase, verify recovery on relaunch)**
 - [ ] Restore purchases (with previous purchase)
 - [ ] Restore purchases (without previous purchase)
 - [ ] Subscription management link
@@ -449,10 +452,12 @@ Before shipping, test all these scenarios:
 - [ ] App works offline (with cached status)
 - [ ] Subscription expiration handling
 - [ ] Subscription renewal
+- [ ] **Refund/revocation handling (test with StoreKit Transaction Manager)**
 - [ ] Family sharing (if enabled)
 
 ## 📚 Additional Resources
 
+- [Transaction Handling Improvements](TRANSACTION_HANDLING.md) - Learn about the reliability improvements
 - [StoreKit2Framework Documentation](../../README.md)
 - [Quick Start Guide](../../QUICK_START.md)
 - [Premium Manager Usage](../../PREMIUM_MANAGER_USAGE.md)
