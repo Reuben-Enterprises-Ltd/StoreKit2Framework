@@ -1102,17 +1102,18 @@ public final class PremiumManager {
         }
         
         // Check if transaction is expired (for subscriptions)
-        if let expirationDate = transaction.expirationDate, expirationDate < Date() {
+        if let expirationDate = transaction.expirationDate, expirationDate.timeIntervalSinceNow < 0 {
             if configuration.enableDebugMode {
                 print("⏰ Transaction \(transaction.id) is expired (expiration: \(expirationDate))")
             }
             // For auto-renewable subscriptions, don't immediately remove access
             // The subscription might still be active if renewed with a different transaction
-            // Let updatePremiumStatus() check subscription.status
+            // Let updatePremiumStatus() check subscription.status to determine current state
             if isAutoRenewableSubscription(transaction.productID) {
                 await updatePremiumStatus()
             }
-            // Don't finish expired transactions - they remain as history
+            // Note: Expired transactions are not finished as they represent completed historical
+            // purchases. Only active/valid transactions follow the verify-grant-finish pattern.
             return
         }
         
