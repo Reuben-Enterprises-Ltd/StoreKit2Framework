@@ -710,13 +710,26 @@ public final class PremiumManager {
         // Load cached status immediately for instant UI
         isPremium = cachedPremiumStatus || premiumOverride
         
-        // Start listening for transaction updates
-        updateListenerTask = listenForTransactions()
-        
-        // Load products and verify status asynchronously
+        // Load products and monitor transactions
         Task {
             await loadProducts()
-            await updatePremiumStatusIfNeeded()
+            
+            // Apple's recommended pattern: process unfinished, then current entitlements, then monitor updates
+            // All use the same handle() method
+            Task(priority: .background) {
+                // Process any unfinished transactions from previous sessions
+                for await verificationResult in Transaction.unfinished {
+                    await handle(updatedTransaction: verificationResult)
+                }
+                
+                // Fetch current entitlements (excludes consumables)
+                for await verificationResult in Transaction.currentEntitlements {
+                    await handle(updatedTransaction: verificationResult)
+                }
+            }
+            
+            // Monitor ongoing transaction updates
+            updateListenerTask = listenForTransactions()
         }
     }
     
@@ -935,17 +948,11 @@ public final class PremiumManager {
         
         switch result {
         case .success(let verification):
-            // Verify the transaction
-            let transaction = try checkVerified(verification)
-            
-            // Update premium status
-            await updatePremiumStatus()
-            
             // Track successful purchase
             configuration.analytics?.trackPurchaseCompleted(product: product)
             
-            // Finish the transaction
-            await transaction.finish()
+            // Use unified handler to process the transaction
+            await handle(updatedTransaction: verification)
             
         case .userCancelled:
             // Track cancellation
@@ -1068,19 +1075,74 @@ public final class PremiumManager {
     
     // MARK: - Real-time Transaction Monitoring
     
+    /// Handle updated transaction from unfinished, currentEntitlements, or updates
+    /// Following Apple's recommended pattern: verify transaction, grant access, then finish
+    private func handle(updatedTransaction verificationResult: VerificationResult<Transaction>) async {
+        // Only handle verified transactions
+        guard case .verified(let transaction) = verificationResult else {
+            if configuration.enableDebugMode {
+                print("⚠️ Unverified transaction, skipping")
+            }
+            return
+        }
+        
+        if configuration.enableDebugMode {
+            print("📦 Handling transaction: productID=\(transaction.productID), transactionID=\(transaction.id)")
+        }
+        
+        // Check if transaction was revoked
+        if let revocationDate = transaction.revocationDate {
+            if configuration.enableDebugMode {
+                print("🚫 Transaction \(transaction.id) was revoked on \(revocationDate)")
+            }
+            // Remove access to the product
+            await updatePremiumStatus()
+            await transaction.finish()
+            return
+        }
+        
+        // Check if transaction is expired (for subscriptions)
+        if let expirationDate = transaction.expirationDate, expirationDate.timeIntervalSinceNow < 0 {
+            if configuration.enableDebugMode {
+                print("⏰ Transaction \(transaction.id) is expired (expiration: \(expirationDate))")
+            }
+            // For auto-renewable subscriptions, don't immediately remove access
+            // The subscription might still be active if renewed with a different transaction
+            // Let updatePremiumStatus() check subscription.status to determine current state
+            if isAutoRenewableSubscription(transaction.productID) {
+                await updatePremiumStatus()
+            }
+            // Note: Expired transactions are not finished as they represent completed historical
+            // purchases. Only active/valid transactions follow the verify-grant-finish pattern.
+            return
+        }
+        
+        // ✅ Grant access to the product FIRST
+        if configuration.enableDebugMode {
+            print("✅ Granting access for transaction \(transaction.id), product \(transaction.productID)")
+        }
+        await updatePremiumStatus()
+        
+        // ✅ Only finish AFTER granting access
+        await transaction.finish()
+        if configuration.enableDebugMode {
+            print("✅ Finished transaction \(transaction.id)")
+        }
+    }
+    
+    /// Check if a product is an auto-renewable subscription
+    private func isAutoRenewableSubscription(_ productID: String) -> Bool {
+        let monthlyId = configuration.productIdentifiers.monthly
+        let yearlyId = configuration.productIdentifiers.yearly
+        return productID == monthlyId || productID == yearlyId
+    }
+    
     /// Listen for transaction updates in the background
     private func listenForTransactions() -> Task<Void, Never> {
         Task { @MainActor [weak self] in
             for await result in Transaction.updates {
                 guard let self else { return }
-                
-                do {
-                    let transaction = try self.checkVerified(result)
-                    await self.updatePremiumStatus()
-                    await transaction.finish()
-                } catch {
-                    print("Transaction verification failed: \(error)")
-                }
+                await self.handle(updatedTransaction: result)
             }
         }
     }
