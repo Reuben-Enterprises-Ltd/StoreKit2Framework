@@ -1077,7 +1077,7 @@ public final class PremiumManager {
     
     /// Handle updated transaction from unfinished, currentEntitlements, or updates
     /// Following Apple's recommended pattern: verify transaction, grant access, then finish
-    private func handle(updatedTransaction verificationResult: VerificationResult<Transaction>) async {
+    private func handle(updatedTransaction verificationResult: VerificationResult<StoreKit.Transaction>) async {
         // Only handle verified transactions
         guard case .verified(let transaction) = verificationResult else {
             if configuration.enableDebugMode {
